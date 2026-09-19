@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe Mobile — SIRPEK (Pertemuan 03)</title>
+<style>
+  :root{
+    --bg:#e9eef6;--surface:#ffffff;--ink:#152339;--muted:#5d6c85;--line:#e2e8f2;
+    --panel:#f6f8fc;--panel-2:#eceff6;
+    --accent:#2f6fdb;--accent-2:#5a8aee;--accent-soft:#e8f0fe;
+    --ok:#17724a;--ok-soft:#e7f5ee;--warn:#b3261e;--warn-soft:#fdeeed;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(15,32,58,.05),0 14px 34px -18px rgba(15,32,58,.3);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);padding:20px 12px 100px;}
+  .doc-nav{max-width:395px;margin:0 auto 4px;font-size:12.5px;color:var(--muted);line-height:1.7;}
+  .doc-nav a{color:var(--accent);text-decoration:none;}
+
+  /* ===== Frame ponsel ===== */
+  .phone{max-width:375px;margin:22px auto;background:var(--surface);border:8px solid #16233a;border-radius:44px;overflow:hidden;box-shadow:0 22px 50px -24px rgba(9,18,35,.6);position:relative;}
+  .phone::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#16233a;border-radius:0 0 14px 14px;z-index:5;}
+  .statusbar{display:flex;justify-content:space-between;padding:12px 22px 4px;font-size:12px;font-weight:700;background:#fff;position:relative;z-index:2;}
+
+  .screen-tag{display:block;max-width:395px;margin:0 auto;padding-top:24px;font-size:12px;color:#fff;background:linear-gradient(120deg,#1d3d6b,#3f6fb0);padding:8px 14px;border-radius:12px 12px 0 0;font-weight:600;}
+  .screen-tag small{font-weight:400;opacity:.85;}
+
+  .topbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:#fff;position:relative;z-index:2;}
+  .burger{width:38px;height:38px;border:1.5px solid var(--line);border-radius:11px;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:9px;cursor:pointer;transition:.15s;}
+  .burger span{display:block;height:2.5px;background:#3c4b66;border-radius:2px;}
+  .logo{font-weight:800;font-size:15px;flex:1;letter-spacing:.1px;}
+  .logo b{color:var(--accent);}
+  .backlink{font-size:20px;text-decoration:none;color:var(--ink);width:34px;display:grid;place-items:center;}
+
+  .content{padding:16px 14px 20px;}
+  h1{font-size:21px;margin-bottom:5px;letter-spacing:-.2px;}
+  h2{font-size:16px;margin:16px 0 8px;}
+  .sub{font-size:13px;color:var(--muted);margin-bottom:14px;}
+  .breadcrumb{font-size:11.5px;color:var(--muted);margin-bottom:11px;line-height:1.6;}
+
+  .card{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:0 6px 16px -14px rgba(15,32,58,.25);}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px;}
+  label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;color:#3d4c67;}
+  .field{margin-bottom:12px;}
+  .field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1.5px solid #cfd8e8;border-radius:11px;font-size:14px;background:#fff;color:var(--ink);transition:.15s;}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .field textarea{min-height:70px;}
+  .checkbox{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-bottom:8px;}
+  .checkbox input{width:18px;height:18px;margin-top:1px;accent-color:var(--accent);}
+
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:13px;font-size:14.5px;font-weight:700;text-decoration:none;transition:.16s;cursor:pointer;}
+  .btn.accent{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 10px 20px -10px rgba(47,111,219,.75);}
+  .btn.accent:hover{transform:translateY(-1px);}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+  .btn.sm{display:inline-flex;padding:8px 14px;font-size:12.5px;border-radius:10px;font-weight:600;}
+  .btn.bar{position:sticky;bottom:78px;margin:14px 14px 8px;box-shadow:0 14px 28px -12px rgba(47,111,219,.65);z-index:4;}
+
+  .res-card{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:12px;margin-bottom:12px;transition:.15s;}
+  .res-card:active{transform:scale(.99);}
+  .res-card .photo{height:84px;border-radius:11px;display:grid;place-items:center;color:#8d9ab4;font-size:12px;background:repeating-linear-gradient(45deg,#eef2f8 0 10px,#e6ebf4 10px 20px);border:1px solid #dbe3ef;margin-bottom:9px;}
+  .res-card h3{font-size:15px;margin-bottom:4px;}
+  .res-card .meta{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:7px;}
+  .foto-besar{height:132px;border-radius:var(--radius);display:grid;place-items:center;color:#8d9ab4;font-size:13px;background:repeating-linear-gradient(45deg,#eef2f8 0 12px,#e6ebf4 12px 24px);border:1px solid #dbe3ef;margin-bottom:12px;}
+
+  .chip{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid var(--line);color:var(--muted);padding:7px 13px;border-radius:999px;font-size:12px;margin:0 6px 6px 0;transition:.15s;}
+  .chip:active{transform:scale(.97);}
+  .chip.filled{background:var(--accent-soft);border-color:var(--accent);color:#1d55b5;font-weight:600;}
+
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:700;}
+  .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .badge.pending{background:var(--accent-soft);color:#1d55b5;}
+  .badge.ok{background:var(--ok-soft);color:var(--ok);}
+  .badge.no{background:var(--warn-soft);color:var(--warn);}
+  .badge.muted{background:var(--panel-2);color:#4a5872;}
+
+  .state{margin-top:16px;border:2px dashed #b9c6dd;border-radius:var(--radius);padding:12px;background:linear-gradient(180deg,#fbfdff,#f4f8ff);}
+  .state > .tag{display:inline-block;background:#101828;color:#fff;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:7px;margin-bottom:10px;letter-spacing:.05em;}
+  .state .tag.alt{background:linear-gradient(135deg,var(--accent),var(--accent-2));}
+  .error-txt{color:var(--warn);font-size:12px;margin-top:4px;display:flex;align-items:center;gap:5px;}
+  .error-txt::before{content:"!";background:var(--warn);color:#fff;width:14px;height:14px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:800;}
+  .error-border{border-color:var(--warn) !important;box-shadow:0 0 0 3px rgba(179,38,30,.1) !important;}
+  .banner{border-radius:12px;padding:11px 14px;margin-bottom:12px;font-size:13px;}
+  .banner.ok{background:var(--ok-soft);color:#14603b;}
+  .banner.warn{background:var(--warn-soft);color:#8f1d15;}
+  .banner.info{background:var(--accent-soft);color:#1d4f9e;}
+
+  /* tabbar bawah */
+  .tabbar{position:sticky;bottom:0;z-index:4;display:flex;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);box-shadow:0 -8px 24px -16px rgba(15,32,58,.3);}
+  .tabbar .tab{flex:1;text-align:center;font-size:10.5px;color:var(--muted);padding:9px 0 11px;text-decoration:none;transition:.15s;}
+  .tabbar .tab b{display:block;font-size:16px;font-weight:500;margin-bottom:1px;}
+  .tabbar .tab.active{color:var(--accent);font-weight:700;}
+  .tabbar .tab.active b{filter:drop-shadow(0 4px 8px rgba(47,111,219,.5));}
+
+  .row{display:flex;justify-content:space-between;gap:10px;align-items:center;}
+  .row .main{flex:1;}
+  .row .act{flex-shrink:0;}
+  .meta-t{font-size:12.5px;color:var(--muted);line-height:1.8;}
+
+  .skeleton{height:13px;border-radius:6px;background:linear-gradient(90deg,#edf1f8 25%,#f8fafd 50%,#edf1f8 75%);background-size:200% 100%;animation:sh 1.2s infinite;margin-bottom:10px;}
+  @keyframes sh{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .spinner{width:20px;height:20px;border:3px solid #d6dfec;border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<nav class="doc-nav">
+  <b>Wireframe Mobile (375px)</b> — <a href="#m-beranda">Beranda</a> · <a href="#m-hasil">Hasil</a> · <a href="#m-detail">Detail</a> · <a href="#m-form">Form</a> · <a href="#m-riwayat">Riwayat</a> · <a href="#m-petugas">Petugas</a><br>
+  Navigasi memakai pola mobile: <b>hamburger menu</b> + <b>bottom tab bar</b>.
+</nav>
+
+<!-- =======================================================================
+     LAYAR M1 : BERANDA + CARI (MOBILE) — US-P-01, US-P-02, state loading
+======================================================================= -->
+<span class="screen-tag">Layar M1 · <small style="text-transform:none;">Beranda + Cari</small></span>
+<section class="screen" id="m-beranda">
+  <div class="phone">
+    <div class="statusbar"><span>09:41</span><span>••• 5G 100%</span></div>
+    <header class="topbar">
+      <button class="burger" aria-label="Buka menu"><span></span><span></span><span></span></button>
+      <div class="logo">SIR<strong>PEK</strong></div>
+      <span class="chat-badge" style="width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#4b638e,#2f4466);color:#fff;font-size:11px;font-weight:700;">RA</span>
+    </header>
+    <main class="content" style="padding-bottom:8px;">
+      <h1>Halo, Raka 👋</h1>
+      <p class="sub">Cari ruang kampus untuk acaramu hari ini.</p>
+
+      <div class="panel">
+        <h2 style="margin-top:0;">🔍 Cari Ruang</h2>
+        <div class="field"><label>Kapasitas peserta (minimum)</label><input type="number" value="50" placeholder="mis. 50"></div>
+        <div class="field"><label>Tanggal acara</label><input type="date" value="2026-10-15"></div>
+        <div class="field"><label>Fasilitas</label>
+          <div class="checkbox"><input type="checkbox" checked> AC</div>
+          <div class="checkbox"><input type="checkbox" checked> Proyektor</div>
+          <div class="checkbox"><input type="checkbox"> Sound system</div>
+        </div>
+        <a class="btn accent" href="#m-hasil">Cari Ruang →</a>
+      </div>
+
+      <!-- STATE: LOADING mobile (US-P-02) -->
+      <div class="state">
+        <span class="tag alt">STATE: LOADING (US-P-02)</span>
+        <div style="display:flex;align-items:center;font-size:13px;font-weight:600;margin-bottom:10px;"><span class="spinner"></span> Mencari ruang…</div>
+        <div class="skeleton"></div><div class="skeleton" style="width:75%;"></div><div class="skeleton" style="width:90%;"></div>
+      </div>
+    </main>
+
+    <!-- STATE: MENU NAVIGASI TERBUKA -->
+    <div class="state" style="margin:0 14px 10px;">
+      <span class="tag">STATE: MENU NAVIGASI TERBUKA (hamburger)</span>
+      <div class="card" style="margin:0;padding:6px 0;">
+        <div style="display:flex;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);"><b style="color:var(--accent);">●</b> Beranda</div>
+        <div style="display:flex;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);"><b>◧</b> Cari Ruang</div>
+        <div style="display:flex;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);"><b>▤</b> Status Pengajuan</div>
+        <div style="display:flex;gap:10px;align-items:center;padding:11px 14px;"><b>◌</b> Bantuan</div>
+      </div>
+    </div>
+
+    <nav class="tabbar">
+      <a class="tab active" href="#m-beranda"><b>◧</b>Beranda</a>
+      <a class="tab" href="#m-hasil"><b>⌕</b>Cari</a>
+      <a class="tab" href="#m-riwayat"><b>▤</b>Status</a>
+    </nav>
+  </div>
+</section>
+
+<!-- =======================================================================
+     LAYAR M2 : HASIL PENCARIAN (MOBILE) — US-P-02, state kosong (ST-03a)
+======================================================================= -->
+<span class="screen-tag">Layar M2 · <small style="text-transform:none;">Hasil Pencarian</small></span>
+<section class="screen" id="m-hasil">
+  <div class="phone">
+    <div class="statusbar"><span>09:41</span><span>••• 5G 100%</span></div>
+    <header class="topbar">
+      <a class="backlink" href="#m-beranda">‹</a>
+      <div class="logo">Hasil Pencarian</div>
+    </header>
+    <main class="content" style="padding-bottom:8px;">
+      <div class="breadcrumb"><b>Kapasitas ≥ 50 · 15 Okt 2026</b><br>AC · Proyektor — 3 ruang ditemukan</div>
+      <div style="margin-bottom:10px;"><span class="chip filled">Urut: relevansi</span><span class="chip">Termurah</span></div>
+
+      <div class="res-card">
+        <div class="photo">📷 Foto Ruang</div>
+        <h3>R.12 Auditorium</h3>
+        <div class="meta">150 orang · Lantai 1 · AC, Proyektor, Sound<br><span class="badge ok">Tersedia 08–16</span></div>
+        <a class="btn accent sm" href="#m-detail">Lihat Detail →</a>
+      </div>
+      <div class="res-card">
+        <div class="photo">📷 Foto Ruang</div>
+        <h3>R.14 Ruang Sidang</h3>
+        <div class="meta">120 orang · Lantai 2 · AC, Proyektor<br><span class="badge ok">Tersedia 08–12</span></div>
+        <a class="btn ghost sm" href="#m-detail">Lihat Detail</a>
+      </div>
+      <div class="res-card">
+        <div class="photo">📷 Foto Ruang</div>
+        <h3>R.16 Serbaguna</h3>
+        <div class="meta">60 orang · Lantai 2 · AC<br><span class="badge no">Jadwal padat</span></div>
+        <a class="btn ghost sm" href="#m-detail">Lihat Detail</a>
+      </div>
+
+      <!-- STATE: KOSONG (ST-03a) -->
+      <div class="state">
+        <span class="tag">STATE: HASIL KOSONG (ST-03a)</span>
+        <div style="text-align:center;padding:8px 0;">
+          <div style="font-size:28px;margin-bottom:6px;">🗃️</div>
+          <div style="font-weight:700;margin-bottom:5px;">Belum ada ruang cocok</div>
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:9px;">Ubah tanggal atau kurangi fasilitas.</p>
+          <a class="btn accent sm" href="#m-beranda">Ubah Filter</a>
+        </div>
+      </div>
+    </main>
+    <nav class="tabbar">
+      <a class="tab" href="#m-beranda"><b>◧</b>Beranda</a>
+      <a class="tab active" href="#m-hasil"><b>⌕</b>Cari</a>
+      <a class="tab" href="#m-riwayat"><b>▤</b>Status</a>
+    </nav>
+  </div>
+</section>
+
+<!-- =======================================================================
+     LAYAR M3 : DETAIL RUANG (MOBILE) — US-P-03, state tidak tersedia (ST-04b)
+======================================================================= -->
+<span class="screen-tag">Layar M3 · <small style="text-transform:none;">Detail Ruang</small></span>
+<section class="screen" id="m-detail">
+  <div class="phone">
+    <div class="statusbar"><span>09:41</span><span>••• 5G 100%</span></div>
+    <header class="topbar">
+      <a class="backlink" href="#m-hasil">‹</a>
+      <div class="logo">Detail Ruang</div>
+    </header>
+    <main class="content" style="padding-bottom:8px;">
+      <div class="banner ok">✓ Tersedia 15 Okt 2026</div>
+      <div class="foto-besar">📷 Foto R.12 Auditorium</div>
+      <h1>R.12 Auditorium</h1>
+      <p class="sub">Gedung Fakultas Lantai 1 · kapasitas 150 orang</p>
+      <div class="card">
+        <b style="font-size:13px;">Fasilitas:</b>
+        <p class="meta-t" style="margin-top:4px;">AC · Proyektor · Sound system · WiFi · Meja &amp; kursi</p>
+      </div>
+      <div class="card">
+        <b style="font-size:13px;">Slot tersedia 15 Okt:</b><br>
+        <div style="margin-top:8px;"><span class="chip filled">08.00–12.00</span><span class="chip">13.00–17.00</span><span class="chip">08.00–16.00</span></div>
+      </div>
+      <a class="btn accent" href="#m-form">Ajukan Peminjaman →</a>
+
+      <!-- STATE: TIDAK TERSEDIA (ST-04b) -->
+      <div class="state">
+        <span class="tag">STATE: RUANG TIDAK TERSEDIA (ST-04b)</span>
+        <div class="banner warn">✕ R.12 sudah terisi pada 15 Okt 2026.</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:9px;">Rekomendasi: <b>R.14</b> (08.00–12.00) atau <b>R.16</b> (13.00–17.00).</p>
+        <a class="btn ghost sm" href="#m-hasil">Pilih Ruang Lain</a>
+      </div>
+    </main>
+    <nav class="tabbar">
+      <a class="tab" href="#m-beranda"><b>◧</b>Beranda</a>
+      <a class="tab active" href="#m-hasil"><b>⌕</b>Cari</a>
+      <a class="tab" href="#m-riwayat"><b>▤</b>Status</a>
+    </nav>
+  </div>
+</section>
+
+<!-- =======================================================================
+     LAYAR M4 : FORM PENGAJUAN (MOBILE) — US-P-04, state validasi (ST-05a)
+======================================================================= -->
+<span class="screen-tag">Layar M4 · <small style="text-transform:none;">Form Pengajuan</small></span>
+<section class="screen" id="m-form">
+  <div class="phone">
+    <div class="statusbar"><span>09:41</span><span>••• 5G 100%</span></div>
+    <header class="topbar">
+      <a class="backlink" href="#m-detail">‹</a>
+      <div class="logo">Form Pengajuan</div>
+    </header>
+    <main class="content" style="padding-bottom:6px;">
+      <div class="breadcrumb"><b>R.12 Auditorium · 15 Okt 2026 · 08.00–12.00</b></div>
+
+      <div class="card">
+        <h2 style="margin-top:0;">Data Kegiatan</h2>
+        <div class="field"><label>Nama kegiatan *</label><input type="text" value="Seminar Nasional TI"></div>
+        <div class="field"><label>Jumlah peserta *</label>
+          <input type="number" value="0" class="error-border">
+          <span class="error-txt">Wajib diisi, minimal 1.</span>
+        </div>
+        <div class="field"><label>Waktu mulai</label><input type="time" value="08:00"></div>
+        <div class="field"><label>Waktu selesai *</label>
+          <input type="time" value="07:00" class="error-border">
+          <span class="error-txt">Harus setelah waktu mulai.</span>
+        </div>
+        <div class="field"><label>Keperluan</label><textarea>Podium, sound eksternal.</textarea></div>
+        <div class="checkbox"><input type="checkbox" checked> Saya menyetujui syarat peminjaman.</div>
+
+        <!-- STATE: VALIDASI ERROR (ST-05a) -->
+        <div class="state">
+          <span class="tag">STATE: VALIDASI ERROR (ST-05a)</span>
+          <div class="banner warn"><b>Form belum lengkap.</b> Perbaiki field bertanda merah, atau pilih ruang lain bila slot 08.00–12.00 sudah terisi (bentrok).</div>
+          <a class="btn ghost" href="#m-form">Perbaiki Form</a>
+          <a class="btn accent" href="#m-beranda" style="margin-top:8px;">Cari Ruang Lain</a>
+        </div>
+      </div>
+    </main>
+    <a class="btn accent bar" href="#m-riwayat">Kirim Pengajuan →</a>
+    <nav class="tabbar">
+      <a class="tab" href="#m-beranda"><b>◧</b>Beranda</a>
+      <a class="tab" href="#m-hasil"><b>⌕</b>Cari</a>
+      <a class="tab active" href="#m-riwayat"><b>▤</b>Status</a>
+    </nav>
+  </div>
+</section>
+
+<!-- =======================================================================
+     LAYAR M5 : STATUS & RIWAYAT (MOBILE) — US-P-05, US-P-06
+======================================================================= -->
+<span class="screen-tag">Layar M5 · <small style="text-transform:none;">Status &amp; Riwayat</small></span>
+<section class="screen" id="m-riwayat">
+  <div class="phone">
+    <div class="statusbar"><span>09:41</span><span>••• 5G 100%</span></div>
+    <header class="topbar">
+      <button class="burger" aria-label="Buka menu"><span></span><span></span><span></span></button>
+      <div class="logo">Status Pengajuan</div>
+    </header>
+    <main class="content" style="padding-bottom:8px;">
+      <div style="margin-bottom:12px;">
+        <span class="chip filled">Semua</span><span class="chip">Diproses</span><span class="chip">Disetujui</span>
+      </div>
+
+      <div class="card row">
+        <div class="main"><b>PNJ-2026-00123</b><br><span class="meta-t">R.12 · 15 Okt · 08.00–12.00</span><br><span class="badge pending">Diproses</span></div>
+        <div class="act"><a class="btn ghost sm" href="#m-riwayat">Batalkan</a></div>
+      </div>
+      <div class="card row">
+        <div class="main"><b>PNJ-2026-00045</b><br><span class="meta-t">R.14 · 2 Okt · 08.00–12.00</span><br><span class="badge ok">Disetujui ✓</span></div>
+        <div class="act"><span style="font-size:11px;color:var(--muted);">selesai</span></div>
+      </div>
+      <div class="card row">
+        <div class="main"><b>PNJ-2026-00011</b><br><span class="meta-t">A.03 · 20 Sep</span><br><span class="badge no">Ditolak — bentrok</span></div>
+        <div class="act"><a class="btn ghost sm" href="#m-riwayat">Alasan</a></div>
+      </div>
+      <div class="card row">
+        <div class="main"><b>PNJ-2026-00009</b><br><span class="meta-t">R.16 · 12 Sep</span><br><span class="badge muted">Dibatalkan</span></div>
+        <div class="act"><span style="font-size:11px;color:var(--muted);">—</span></div>
+      </div>
+
+      <p style="font-size:11.5px;color:var(--muted);margin-top:6px;">Diproses → dapat dibatalkan (US-P-06). Keputusan petugas langsung terlihat di sini (US-P-05).</p>
+    </main>
+    <nav class="tabbar">
+      <a class="tab" href="#m-beranda"><b>◧</b>Beranda</a>
+      <a class="tab" href="#m-hasil"><b>⌕</b>Cari</a>
+      <a class="tab active" href="#m-riwayat"><b>▤</b>Status</a>
+    </nav>
+  </div>
+</section>
+
+<!-- =======================================================================
+     LAYAR M6 : DAFTAR PENGAJUAN (PETUGAS, MOBILE) — US-O-01
+======================================================================= -->
+<span class="screen-tag">Layar M6 · <small style="text-transform:none;">Petugas — Daftar Pengajuan</small></span>
+<section class="screen" id="m-petugas">
+  <div class="phone">
+    <div class="statusbar"><span>09:41</span><span>••• 5G 100%</span></div>
+    <header class="topbar">
+      <button class="burger" aria-label="Buka menu"><span></span><span></span><span></span></button>
+      <div class="logo">Petugas · SIR<strong>PEK</strong></div>
+      <span class="chat-badge" style="width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#4b638e,#2f4466);color:#fff;font-size:11px;font-weight:700;">SL</span>
+    </header>
+    <main class="content">
+      <h1>Antrian Pengajuan</h1>
+      <p class="sub">Ibu Sri · Admin — <b>5 menunggu</b> hari ini.</p>
+
+      <div class="card row">
+        <div class="main"><b>R.12 Auditorium</b><br><span class="meta-t">Raka Ardiansyah · 15 Okt</span></div>
+        <div class="act"><span class="badge pending">Menunggu</span></div>
+      </div>
+      <div class="card row">
+        <div class="main"><b>R.14 Ruang Sidang</b><br><span class="meta-t">Dewi Anjani · 15 Okt</span></div>
+        <div class="act"><span class="badge pending">Menunggu</span></div>
+      </div>
+      <div class="card row">
+        <div class="main"><b>R.16 Serbaguna</b><br><span class="meta-t">Budi Santoso · 14 Okt</span></div>
+        <div class="act"><span class="badge ok">Disetujui</span></div>
+      </div>
+      <a class="btn accent" href="#m-beranda">Keluar mode petugas →</a>
+    </main>
+  </div>
+</section>
+
+</body>
+</html>

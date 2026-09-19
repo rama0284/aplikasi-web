@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe Desktop — SIRPEK (Pertemuan 03)</title>
+<style>
+  :root{
+    --bg:#e9eef6;
+    --surface:#ffffff;
+    --ink:#152339;
+    --muted:#5d6c85;
+    --line:#e2e8f2;
+    --panel:#f6f8fc;
+    --panel-2:#eceff6;
+    --accent:#2f6fdb;
+    --accent-2:#5a8aee;
+    --accent-soft:#e8f0fe;
+    --accent-ring:#c3d6f6;
+    --ok:#17724a;    --ok-soft:#e7f5ee;
+    --warn:#b3261e;  --warn-soft:#fdeeed;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(15,32,58,.05), 0 12px 30px -18px rgba(15,32,58,.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);padding:24px 24px 110px;}
+
+  /* ===== Navigasi index (sticky) ===== */
+  .doc-nav{
+    position:sticky;top:0;z-index:60;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    background:rgba(23,36,58,.92);backdrop-filter:blur(8px);color:#fff;border-radius:14px;
+    padding:12px 16px;max-width:1490px;margin:0 auto;
+  }
+  .doc-nav strong{font-size:13px;margin-right:6px;letter-spacing:.2px;}
+  .doc-nav a{color:#dbe7f8;background:rgba(255,255,255,.09);padding:6px 11px;border-radius:9px;text-decoration:none;font-size:12.5px;transition:.15s;}
+  .doc-nav a:hover{background:var(--accent);color:#fff;}
+  .doc-nav .hint{margin-left:auto;color:#9fb3ca;font-size:12px;}
+  .doc-nav .hint b{color:#fff;}
+
+  /* ===== Label layar ===== */
+  .screen-tag{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    max-width:1490px;margin:44px auto -12px;padding:10px 16px;
+    background:linear-gradient(120deg,#1d3d6b,#3f6fb0);color:#fff;
+    border-radius:12px 12px 0 0;font-size:13px;font-weight:600;letter-spacing:.15px;
+    box-shadow:0 -8px 24px -18px rgba(15,32,58,.5);
+  }
+  .screen-tag small{font-weight:400;opacity:.85;}
+  .screen-tag .n{opacity:.75;font-size:11.5px;background:rgba(255,255,255,.14);padding:2px 9px;border-radius:999px;}
+
+  /* ===== Frame layar + chrome mengambang ===== */
+  .screen{max-width:1490px;margin:12px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:0 0 18px 18px;box-shadow:var(--shadow);}
+  .chrome{display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted);}
+  .chrome .dots{display:flex;gap:6px;}
+  .chrome .dots i{width:11px;height:11px;border-radius:50%;background:#d3dbe8;}
+  .chrome .addr{flex:1;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 14px;max-width:420px;color:var(--muted);}
+  .chrome .addr b{color:var(--accent);font-weight:600;}
+
+  /* ===== Header situs ===== */
+  .site-header{display:flex;align-items:center;gap:26px;padding:16px 36px;border-bottom:1px solid var(--line);}
+  .logo{font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:10px;letter-spacing:.1px;}
+  .logo .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 6px 14px -6px rgba(47,111,219,.6);}
+  .logo .role{display:block;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;line-height:1;}
+  .nav{display:flex;gap:6px;font-size:13.5px;}
+  .nav a{color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:999px;transition:.15s;}
+  .nav a:hover{background:var(--panel);color:var(--ink);}
+  .nav a.active{background:var(--accent-soft);color:#1d55b5;font-weight:600;}
+  .spacer{flex:1;}
+  .avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;background:linear-gradient(135deg,#4b638e,#2f4466);box-shadow:inset 0 0 0 2px #fff,0 3px 8px -2px rgba(15,32,58,.4);}
+  .who{font-size:12px;color:var(--muted);line-height:1.15;text-align:right;}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:11px;font-size:13.5px;font-weight:600;text-decoration:none;border:1px solid transparent;transition:.16s;cursor:pointer;}
+  .btn.accent{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 8px 18px -9px rgba(47,111,219,.8);}
+  .btn.accent:hover{transform:translateY(-1px);}
+  .btn.ghost{background:#fff;color:var(--ink);border-color:#d3dbe8;}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:#fafcff;}
+  .btn.sm{padding:6px 13px;font-size:12.5px;border-radius:9px;}
+
+  .content{padding:30px 36px 42px;}
+  .footer{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding:14px 36px;font-size:12.5px;color:var(--muted);background:var(--panel);border-radius:0 0 18px 18px;}
+  .breadcrumb{font-size:12.5px;color:var(--muted);margin-bottom:16px;display:flex;gap:6px;flex-wrap:wrap;}
+  .breadcrumb b{color:var(--ink);font-weight:600;}
+
+  h1{font-size:26px;margin-bottom:6px;letter-spacing:-.2px;}
+  h2{font-size:17px;margin-bottom:12px;letter-spacing:-.1px;}
+  .sub{color:var(--muted);font-size:13.5px;margin-bottom:20px;}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 6px 18px -14px rgba(15,32,58,.25);}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
+  .grid{display:grid;gap:16px;}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  .grid.cols-2{grid-template-columns:1fr 1fr;}
+  .grid.cols-12{grid-template-columns:2fr 1fr;}
+
+  label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:#3d4c67;}
+  .field{margin-bottom:15px;}
+  .field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1.5px solid #cfd8e8;border-radius:11px;font-size:13.5px;background:#fff;color:var(--ink);transition:.15s;}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .field textarea{min-height:78px;resize:vertical;}
+  .checkbox{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:13px;}
+  .checkbox input{width:18px;height:18px;margin-top:1px;accent-color:var(--accent);}
+
+  .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--line);color:var(--muted);padding:8px 15px;border-radius:999px;font-size:12.5px;margin:0 8px 8px 0;transition:.15s;}
+  .chip.filled{background:var(--accent-soft);border-color:var(--accent);color:#1d55b5;font-weight:600;}
+
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:999px;font-size:12px;font-weight:700;}
+  .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+  .badge.pending{background:var(--accent-soft);color:#1d55b5;}
+  .badge.ok{background:var(--ok-soft);color:var(--ok);}
+  .badge.no{background:var(--warn-soft);color:var(--warn);}
+  .badge.muted{background:var(--panel-2);color:#4a5872;}
+
+  /* kartu hasil */
+  .res-card{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;gap:16px;transition:.18s;box-shadow:0 4px 14px -12px rgba(15,32,58,.2);}
+  .res-card:hover{border-color:var(--accent-ring);transform:translateY(-2px);box-shadow:0 14px 28px -16px rgba(47,111,219,.35);}
+  .res-card .photo{width:118px;min-height:84px;border-radius:11px;display:grid;place-items:center;color:#8d9ab4;font-size:12px;background:repeating-linear-gradient(45deg,#eef2f8 0 10px,#e6ebf4 10px 20px);border:1px solid #dbe3ef;}
+  .res-card h3{font-size:15.5px;margin-bottom:6px;}
+  .res-card .meta{font-size:12.5px;color:var(--muted);line-height:1.75;}
+  .res-card .actions{margin-left:auto;display:flex;flex-direction:column;gap:9px;justify-content:center;}
+
+  .foto-besar{width:100%;height:260px;border-radius:var(--radius);display:grid;place-items:center;color:#8d9ab4;font-size:14px;background:repeating-linear-gradient(45deg,#eef2f8 0 12px,#e6ebf4 12px 24px);border:1px solid #dbe3ef;}
+
+  .table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;}
+  .table th,.table td{padding:12px 13px;text-align:left;border-bottom:1px solid var(--line);}
+  .table th{background:var(--panel);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+  .table th:first-child{border-radius:12px 0 0 0;}
+  .table th:last-child{border-radius:0 12px 0 0;}
+  .table tbody tr:nth-child(even){background:#fafbff;}
+  .table tbody tr:hover{background:var(--accent-soft);}
+  .table td:last-child{border-bottom-right-radius:10px;}
+
+  /* State variants */
+  .state{margin-top:30px;border:2px dashed #b9c6dd;border-radius:var(--radius);padding:18px;background:linear-gradient(180deg,#fbfdff,#f4f8ff);position:relative;}
+  .state::before{content:"";position:absolute;inset:-2.5px 60% -2.5px -2.5px;border-right:2px dashed #b9c6dd;border-radius:var(--radius) 0 0 var(--radius);pointer-events:none;}
+  .state > .tag{display:inline-block;background:#101828;color:#fff;font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:7px;margin-bottom:12px;letter-spacing:.06em;}
+  .state .tag.alt{background:linear-gradient(135deg,var(--accent),var(--accent-2));}
+  .error-txt{color:var(--warn);font-size:12px;margin-top:5px;display:flex;align-items:center;gap:5px;}
+  .error-txt::before{content:"!";background:var(--warn);color:#fff;width:15px;height:15px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;}
+  .error-border{border-color:var(--warn) !important;box-shadow:0 0 0 3px rgba(179,38,30,.1) !important;}
+
+  .banner{display:flex;gap:11px;align-items:flex-start;border-radius:12px;padding:13px 16px;margin-bottom:18px;font-size:13.5px;}
+  .banner.info{background:var(--accent-soft);color:#1d4f9e;}
+  .banner.warn{background:var(--warn-soft);color:#8f1d15;}
+  .banner.ok{background:var(--ok-soft);color:#14603b;}
+
+  .skeleton{height:13px;border-radius:6px;background:linear-gradient(90deg,#edf1f8 25%,#f8fafd 50%,#edf1f8 75%);background-size:200% 100%;animation:sh 1.2s infinite;margin-bottom:10px;}
+  @keyframes sh{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .spinner{width:21px;height:21px;border:3px solid #d6dfec;border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .backlink{display:inline-block;margin-bottom:14px;font-size:12.5px;color:var(--accent);text-decoration:none;}
+  .flowbar{margin-top:20px;padding-top:16px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .flowbar a{color:var(--accent);text-decoration:none;}
+  .stat-num{font-size:30px;font-weight:800;letter-spacing:-.5px;display:block;margin:4px 0;}
+</style>
+</head>
+<body>
+
+<nav class="doc-nav">
+  <strong>Wireframe Desktop · SIRPEK:</strong>
+  <a href="#screen-beranda">Beranda/Cari</a>
+  <a href="#screen-hasil">Hasil</a>
+  <a href="#screen-detail-ruang">Detail</a>
+  <a href="#screen-form">Form</a>
+  <a href="#screen-sukses">Sukses</a>
+  <a href="#screen-riwayat">Riwayat</a>
+  <a href="#screen-petugas">Petugas</a>
+  <a href="#screen-detail-pengajuan">Detail Pengajuan</a>
+  <span class="hint">🎯 Gunakan <b>prototype.html</b> untuk alur klik lengkap.</span>
+</nav>
+
+<!-- =======================================================================
+     LAYAR 1 : BERANDA + CARI RUANG
+     Mewakili: US-P-01 (Masuk), US-P-02 (Cari Ruang), state Loading.
+======================================================================= -->
+<span class="screen-tag">Layar 1 · <small style="text-transform:none;">Beranda + Cari Ruang</small> <span class="n">US-P-01 · US-P-02</span> <span class="n">state: default &amp; loading</span></span>
+<section class="screen" id="screen-beranda">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/beranda</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span><span>SIRPEK<span class="role">Sistem Peminjaman Ruang</span></span></div>
+    <nav class="nav"><a href="#screen-beranda" class="active">Beranda</a><a href="#screen-hasil">Cari Ruang</a><a href="#screen-riwayat">Status Saya</a></nav>
+    <div class="spacer"></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a class="btn ghost sm" href="#screen-petugas">Mode Petugas</a>
+      <span class="who">Raka Ardiansyah<br><span style="opacity:.7;">Panitia HIMATIF</span></span>
+      <span class="avatar">RA</span>
+    </div>
+  </header>
+
+  <main class="content">
+    <h1>Selamat datang kembali, Raka 👋</h1>
+    <p class="sub">Mau menyelenggarakan acara? Cari ruang kampus yang cocok dalam hitungan detik.</p>
+
+    <div class="panel">
+      <h2>🔍 Cari Ruang</h2>
+      <div class="grid cols-3">
+        <div class="field"><label>Kapasitas peserta (minimum)</label>
+          <input type="number" value="50" placeholder="mis. 50"></div>
+        <div class="field"><label>Tanggal acara</label>
+          <input type="date" value="2026-10-15"></div>
+        <div class="field"><label>Fasilitas</label>
+          <div class="checkbox"><input type="checkbox" checked> AC</div>
+          <div class="checkbox"><input type="checkbox" checked> Proyektor</div>
+          <div class="checkbox"><input type="checkbox"> Sound system</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <a class="btn accent" href="#screen-hasil">Cari Ruang <span>→</span></a>
+        <span class="chip filled">Kapasitas ≥ 50</span>
+        <span class="chip filled">15 Okt 2026</span>
+      </div>
+    </div>
+
+    <!-- STATE: Loading — mewakili US-P-02 (proses mencari). -->
+    <div class="state">
+      <span class="tag alt">STATE: LOADING — saat sistem mencari ruang</span>
+      <div style="display:flex;align-items:center;margin-bottom:14px;font-size:13.5px;font-weight:600;"><span class="spinner"></span> Mencari ruang yang cocok…</div>
+      <div class="grid cols-3">
+        <div class="card" style="padding:14px;"><div class="skeleton"></div><div class="skeleton" style="width:80%;"></div><div class="skeleton" style="width:55%;"></div></div>
+        <div class="card" style="padding:14px;"><div class="skeleton"></div><div class="skeleton" style="width:80%;"></div><div class="skeleton" style="width:55%;"></div></div>
+        <div class="card" style="padding:14px;"><div class="skeleton"></div><div class="skeleton" style="width:80%;"></div><div class="skeleton" style="width:55%;"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026 · Praktik Aplikasi Web UNY</span>
+    <a class="btn ghost sm" href="#screen-sukses">Lanjut (simulasi login) → lihat hasil →</a>
+  </footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 2 : HASIL PENCARIAN
+     Mewakili: US-P-02, state Kosong (ST-03a).
+======================================================================= -->
+<span class="screen-tag">Layar 2 · <small style="text-transform:none;">Hasil Pencarian</small> <span class="n">US-P-02</span> <span class="n">state: hasil &amp; kosong</span></span>
+<section class="screen" id="screen-hasil">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/cari/hasil</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span>SIRPEK</div>
+    <nav class="nav"><a href="#screen-beranda">Beranda</a><a href="#screen-hasil" class="active">Hasil Pencarian</a><a href="#screen-riwayat">Status Saya</a></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="#screen-beranda">Ubah Filter ↺</a>
+  </header>
+
+  <main class="content">
+    <div class="breadcrumb"><b>Beranda</b> <span>/</span> Hasil Pencarian <span>/</span> <b>Kapasitas ≥ 50 · 15 Okt 2026 · AC, Proyektor</b></div>
+    <h1>Ditemukan 3 ruang yang cocok</h1>
+    <p class="sub">Pilih ruang untuk melihat detail fasilitas dan slot waktu.</p>
+
+    <div class="grid" style="gap:14px;">
+      <div class="res-card">
+        <div class="photo">📷 Foto Ruang</div>
+        <div style="flex:1;">
+          <h3>R.12 — Auditorium Fakultas</h3>
+          <div class="meta">Kapasitas <b>150</b> orang · Gedung Fakultas Lantai 1<br>
+          Fasilitas: AC · Proyektor · Sound system · WiFi</div>
+          <span class="badge ok">Tersedia 08.00–16.00</span>
+        </div>
+        <div class="actions"><a class="btn accent sm" href="#screen-detail-ruang">Lihat Detail</a></div>
+      </div>
+      <div class="res-card">
+        <div class="photo">📷 Foto Ruang</div>
+        <div style="flex:1;">
+          <h3>R.14 — Ruang Sidang</h3>
+          <div class="meta">Kapasitas <b>120</b> orang · Gedung Fakultas Lantai 2<br>
+          Fasilitas: AC · Proyektor · Meja-kursi</div>
+          <span class="badge ok">Tersedia 08.00–12.00</span>
+        </div>
+        <div class="actions"><a class="btn ghost sm" href="#screen-detail-ruang">Lihat Detail</a></div>
+      </div>
+      <div class="res-card">
+        <div class="photo">📷 Foto Ruang</div>
+        <div style="flex:1;">
+          <h3>R.16 — Ruang Serbaguna</h3>
+          <div class="meta">Kapasitas <b>60</b> orang · Gedung Fakultas Lantai 2<br>
+          Fasilitas: AC · Meja-kursi</div>
+          <span class="badge no">Jadwal padat — cek slot</span>
+        </div>
+        <div class="actions"><a class="btn ghost sm" href="#screen-detail-ruang">Lihat Detail</a></div>
+      </div>
+    </div>
+
+    <!-- STATE: KOSONG — mewakili ST-03a (US-P-02). -->
+    <div class="state">
+      <span class="tag">STATE: HASIL KOSONG (ST-03a) — saat tidak ada ruang cocok</span>
+      <div style="text-align:center;padding:16px 0 6px;">
+        <div style="font-size:34px;margin-bottom:8px;">🗃️</div>
+        <div style="font-size:15.5px;font-weight:700;margin-bottom:6px;">Belum ada ruang yang cocok</div>
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">Coba perbesar kapasitas, ubah tanggal, atau kurangi fasilitas yang dicentang.</p>
+        <a class="btn accent" href="#screen-beranda">Ubah Filter</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026</span>
+    <a class="btn ghost sm" href="#screen-beranda">← Kembali ke Cari Ruang</a>
+  </footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 3 : DETAIL RUANG
+     Mewakili: US-P-03, state Tidak Tersedia (ST-04b).
+======================================================================= -->
+<span class="screen-tag">Layar 3 · <small style="text-transform:none;">Detail Ruang R.12</small> <span class="n">US-P-03</span> <span class="n">state: tersedia &amp; tidak tersedia</span></span>
+<section class="screen" id="screen-detail-ruang">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/ruang/r.12</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span>SIRPEK</div>
+    <nav class="nav"><a href="#screen-beranda">Beranda</a><a href="#screen-hasil">Hasil</a><a href="#screen-detail-ruang" class="active">Detail Ruang</a></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="#screen-hasil">← Kembali ke Hasil</a>
+  </header>
+
+  <main class="content">
+    <div class="breadcrumb"><b>Beranda</b> <span>/</span> Hasil Pencarian <span>/</span> <b>R.12 Auditorium</b></div>
+    <div class="banner ok"><b>✓ Tersedia</b> — Ruang R.12 bebas pada <b>15 Okt 2026</b>.</div>
+
+    <div class="grid cols-12">
+      <div>
+        <div class="foto-besar">📷 Foto Ruang R.12 — Auditorium Fakultas</div>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="chip filled">08.00–12.00</span>
+          <span class="chip">13.00–17.00</span>
+          <span class="chip">08.00–16.00</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>R.12 — Auditorium Fakultas</h2>
+        <p style="font-size:14px;line-height:2.1;color:#3d4c67;">
+          <b>Kapasitas:</b> 150 orang<br>
+          <b>Lokasi:</b> Gedung Fakultas, Lantai 1<br>
+          <b>Fasilitas:</b> AC, Proyektor, Sound, WiFi, Meja-kursi<br>
+          <b>Slot tersedia 15 Okt:</b>
+        </p>
+        <a class="btn accent" href="#screen-form" style="margin-top:10px;">Ajukan Peminjaman →</a>
+        <div class="flowbar"><a href="#screen-hasil">← Pilih slot lain</a></div>
+      </div>
+    </div>
+
+    <!-- STATE: TIDAK TERSEDIA — mewakili ST-04b (US-P-03). -->
+    <div class="state">
+      <span class="tag">STATE: RUANG TIDAK TERSEDIA (ST-04b)</span>
+      <div class="banner warn"><b>⚠ Ruang R.12 sudah terisi</b> pada <b>15 Okt 2026</b>.</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">
+        Rekomendasi ruang lain yang muat ≥ 50 peserta: <b>R.14 Ruang Sidang</b> (tersedia 08.00–12.00) atau <b>R.16</b> (13.00–17.00).
+      </p>
+      <a class="btn ghost" href="#screen-hasil">Pilih Ruang Lain →</a>
+    </div>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026</span>
+    <a class="btn ghost sm" href="#screen-hasil">← Kembali</a>
+  </footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 4 : FORM PENGAJUAN
+     Mewakili: US-P-04, state Validasi Error (ST-05a) + bentrok.
+======================================================================= -->
+<span class="screen-tag">Layar 4 · <small style="text-transform:none;">Form Pengajuan</small> <span class="n">US-P-04</span> <span class="n">state: isian &amp; validasi error</span></span>
+<section class="screen" id="screen-form">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/pengajuan/baru</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span>SIRPEK</div>
+    <nav class="nav"><a href="#screen-beranda">Beranda</a><a href="#screen-hasil">Hasil</a><a href="#screen-form" class="active">Form Pengajuan</a></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="#screen-detail-ruang">← Kembali ke Detail</a>
+  </header>
+
+  <main class="content">
+    <div class="breadcrumb"><b>Beranda</b> <span>/</span> Hasil <span>/</span> R.12 Auditorium <span>/</span> <b>Form Pengajuan</b></div>
+    <h1>Ajukan Peminjaman Ruang</h1>
+    <p class="sub">Atas nama <b>Raka Ardiansyah</b> (NIM 23405241051) · Ruang <b>R.12 Auditorium</b> · 15 Okt 2026</p>
+
+    <div class="grid cols-12">
+      <div class="card">
+        <h2>Data Pengajuan</h2>
+        <div class="grid cols-2">
+          <div class="field"><label>Nama kegiatan *</label><input type="text" value="Seminar Nasional Teknologi Informasi"></div>
+          <div class="field"><label>Jumlah peserta *</label>
+            <input type="number" value="0" class="error-border">
+            <span class="error-txt">Wajib diisi, minimal 1 (maks. 150).</span>
+          </div>
+        </div>
+        <div class="grid cols-2">
+          <div class="field"><label>Waktu mulai *</label><input type="time" value="08:00"></div>
+          <div class="field"><label>Waktu selesai *</label>
+            <input type="time" value="07:00" class="error-border">
+            <span class="error-txt">Waktu selesai harus setelah waktu mulai.</span>
+          </div>
+        </div>
+        <div class="field"><label>Keperluan / fasilitas tambahan</label>
+          <textarea>Podium, sound system eksternal. Konsumsi tidak diizinkan.</textarea></div>
+        <div class="checkbox"><input type="checkbox" checked> Saya memahami syarat &amp; ketentuan peminjaman ruang.</div>
+        <a class="btn accent" href="#screen-sukses" style="margin-top:8px;">Kirim Pengajuan →</a>
+      </div>
+
+      <div class="card">
+        <h2>Ringkasan Pilihan</h2>
+        <p style="font-size:13.5px;line-height:2.1;color:#3d4c67;">
+          <b>Ruang:</b> R.12 Auditorium<br>
+          <b>Kapasitas:</b> 150<br>
+          <b>Tanggal:</b> 15 Okt 2026<br>
+          <b>Slot:</b> 08.00–12.00<br>
+          <b>Fasilitas:</b> AC, Proyektor, Sound
+        </p>
+        <span class="badge pending">Status awal: Diproses</span>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;">Nomor pengajuan diterbitkan otomatis setelah kirim.</p>
+      </div>
+    </div>
+
+    <!-- STATE: VALIDASI ERROR + BENTROK — mewakili ST-05a (US-P-04). -->
+    <div class="state">
+      <span class="tag">STATE: VALIDASI ERROR / BENTROK (ST-05a)</span>
+      <div class="banner warn"><b>Pengajuan belum dapat dikirim.</b> Perbaiki field yang ditandai, atau slot 08.00–12.00 pada 15 Okt 2026 sudah terisi pengajuan lain (bentrok).</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn ghost" href="#screen-form">Perbaiki Form</a>
+        <a class="btn accent" href="#screen-beranda">Cari Ruang Lain</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026</span>
+    <a class="btn ghost sm" href="#screen-detail-ruang">← Kembali</a>
+  </footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 5 : SUKSES KIRIM PENGAJUAN
+     Mewakili: US-P-04 (nomor pengajuan) & US-P-05.
+======================================================================= -->
+<span class="screen-tag">Layar 5 · <small style="text-transform:none;">Pengajuan Berhasil</small> <span class="n">US-P-04 · US-P-05</span> <span class="n">state: sukses (ST-05b)</span></span>
+<section class="screen" id="screen-sukses">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/pengajuan/PNJ-2026-00123</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span>SIRPEK</div>
+    <nav class="nav"><a href="#screen-beranda">Beranda</a><a href="#screen-hasil">Cari Ruang</a><a href="#screen-riwayat">Status Saya</a></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="#screen-riwayat">Lihat Status</a>
+  </header>
+
+  <main class="content" style="text-align:center;padding:56px 36px;">
+    <div style="width:74px;height:74px;border-radius:50%;margin:0 auto 20px;display:grid;place-items:center;font-size:34px;color:#fff;background:linear-gradient(135deg,#2f8f5f,#43b47e);box-shadow:0 14px 30px -12px rgba(47,143,95,.65);">✓</div>
+    <h1>Pengajuan Berhasil Dikirim 🎉</h1>
+    <p class="sub">Pengajuan ruang Anda telah tercatat. Simpan nomor berikut:</p>
+    <div style="font-size:26px;font-weight:800;letter-spacing:1px;color:var(--accent);padding:16px 10px;border:2px dashed var(--accent);border-radius:14px;max-width:360px;margin:0 auto 18px;background:var(--accent-soft);">PNJ-2026-00123</div>
+    <div style="font-size:14px;color:var(--muted);line-height:2.1;">
+      Ruang: <b>R.12 Auditorium</b> · 15 Okt 2026 · 08.00–12.00<br>
+      <span class="badge pending">Status: Diproses</span>
+    </div>
+    <div class="flowbar" style="justify-content:center;">
+      <a class="btn accent" href="#screen-riwayat">Lihat Status Pengajuan →</a>
+      <a class="btn ghost" href="#screen-beranda">Kembali ke Beranda</a>
+    </div>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026</span><span></span></footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 6 : STATUS & RIWAYAT
+     Mewakili: US-P-05 (badge status), US-P-06 (batalkan).
+======================================================================= -->
+<span class="screen-tag">Layar 6 · <small style="text-transform:none;">Status &amp; Riwayat</small> <span class="n">US-P-05 · US-P-06</span> <span class="n">state: 4 badge status</span></span>
+<section class="screen" id="screen-riwayat">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/status</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span>SIRPEK</div>
+    <nav class="nav"><a href="#screen-beranda">Beranda</a><a href="#screen-hasil">Cari Ruang</a><a href="#screen-riwayat" class="active">Status Saya</a></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="#screen-petugas">Mode Petugas</a>
+  </header>
+
+  <main class="content">
+    <div class="breadcrumb"><b>Beranda</b> <span>/</span> Status &amp; Riwayat Pengajuan</div>
+    <h1>Status Pengajuan Anda</h1>
+    <p class="sub">Pantau keputusan petugas. Pengajuan berstatus <b>Diproses</b> masih dapat dibatalkan (US-P-06).</p>
+
+    <div style="margin-bottom:16px;">
+      <span class="chip filled">Semua</span><span class="chip">Diproses</span><span class="chip">Disetujui</span><span class="chip">Ditolak</span>
+    </div>
+
+    <table class="table">
+      <thead><tr><th>No. Pengajuan</th><th>Ruang</th><th>Tanggal / Waktu</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>PNJ-2026-00123</b></td><td>R.12 Auditorium</td><td>15 Okt 2026 · 08.00–12.00</td>
+          <td><span class="badge pending">Diproses</span></td>
+          <td><a class="btn ghost sm" href="#screen-sukses">Detail</a> <a class="btn ghost sm" href="#screen-riwayat">Batalkan</a></td>
+        </tr>
+        <tr>
+          <td>PNJ-2026-00045</td><td>R.14 Ruang Sidang</td><td>2 Okt 2026 · 08.00–12.00</td>
+          <td><span class="badge ok">Disetujui</span></td>
+          <td><a class="btn ghost sm" href="#">Detail</a></td>
+        </tr>
+        <tr>
+          <td>PNJ-2026-00011</td><td>A.03 Aula</td><td>20 Sep 2026 · 13.00–15.00</td>
+          <td><span class="badge no">Ditolak — bentrok</span></td>
+          <td><a class="btn ghost sm" href="#screen-riwayat">Lihat Alasan</a></td>
+        </tr>
+        <tr>
+          <td>PNJ-2026-00009</td><td>R.16 Serbaguna</td><td>12 Sep 2026 · 09.00–11.00</td>
+          <td><span class="badge muted">Dibatalkan</span></td>
+          <td><a class="btn ghost sm" href="#">Detail</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px;">ST-06a Diproses → tombol <b>Batalkan</b> + konfirmasi → ST-06d Dibatalkan (US-P-06). Keputusan petugas (ST-06b/06c) langsung tampil di sini (US-P-05).</p>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026</span>
+    <a class="btn ghost sm" href="#screen-beranda">← Kembali ke Beranda</a>
+  </footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 7 : DASBOR + DAFTAR PENGAJUAN (PETUGAS)
+     Mewakili: US-O-01.
+======================================================================= -->
+<span class="screen-tag">Layar 7 · <small style="text-transform:none;">Petugas — Dasbor &amp; Daftar Pengajuan</small> <span class="n">US-O-01</span> <span class="n">nav khusus petugas</span></span>
+<section class="screen" id="screen-petugas">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/admin/pengajuan</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span><span>SIRPEK <span class="role">Mode Petugas</span></span></div>
+    <nav class="nav"><a href="#screen-petugas" class="active">Dasbor Petugas</a><a href="#screen-petugas">Daftar Pengajuan</a><a href="#screen-petugas">Master Ruang</a></nav>
+    <div class="spacer"></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="who">Sri Lestari<br><span style="opacity:.7;">Admin</span></span>
+      <span class="avatar">SL</span>
+      <a class="btn ghost sm" href="#screen-beranda">Keluar</a>
+    </div>
+  </header>
+
+  <main class="content">
+    <h1>Selamat datang, Ibu Sri 👋</h1>
+    <p class="sub">Ringkasan antrian peminjaman ruang hari ini.</p>
+
+    <div class="grid cols-3" style="margin-bottom:24px;">
+      <div class="card"><b style="font-size:13px;">Menunggu tinjauan</b><span class="stat-num" style="color:var(--accent);">5</span><span class="badge pending">perlu diproses</span></div>
+      <div class="card"><b style="font-size:13px;">Disetujui</b><span class="stat-num">3</span><span class="badge ok">hari ini</span></div>
+      <div class="card"><b style="font-size:13px;">Ditolak</b><span class="stat-num">2</span><span class="badge no">dengan alasan</span></div>
+    </div>
+
+    <h2>Daftar Pengajuan</h2>
+    <div style="margin-bottom:14px;"><span class="chip filled">Semua</span><span class="chip">Menunggu</span><span class="chip">Disetujui</span><span class="chip">Ditolak</span></div>
+
+    <table class="table">
+      <thead><tr><th>No</th><th>No. Pengajuan</th><th>Pemohon</th><th>Ruang</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>PNJ-2026-00123</b></td><td>Raka Ardiansyah</td><td>R.12 Auditorium</td><td>15 Okt</td><td><span class="badge pending">Menunggu</span></td><td><a class="btn accent sm" href="#screen-detail-pengajuan">Tinjau</a></td></tr>
+        <tr><td>2</td><td>PNJ-2026-00122</td><td>Dewi Anjani</td><td>R.14 Sidang</td><td>15 Okt</td><td><span class="badge pending">Menunggu</span></td><td><a class="btn accent sm" href="#screen-detail-pengajuan">Tinjau</a></td></tr>
+        <tr><td>3</td><td>PNJ-2026-00120</td><td>Budi Santoso</td><td>R.16 Serbaguna</td><td>14 Okt</td><td><span class="badge ok">Disetujui</span></td><td><a class="btn ghost sm" href="#screen-detail-pengajuan">Detail</a></td></tr>
+        <tr><td>4</td><td>PNJ-2026-00118</td><td>Sarah Wijaya</td><td>A.03 Aula</td><td>14 Okt</td><td><span class="badge no">Ditolak</span></td><td><a class="btn ghost sm" href="#screen-detail-pengajuan">Detail</a></td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026 · Akses: petugas</span>
+    <a class="btn ghost sm" href="#screen-beranda">← Keluar ke mode pengguna</a>
+  </footer>
+</section>
+
+<!-- =======================================================================
+     LAYAR 8 : DETAIL PENGAJUAN (PETUGAS)
+     Mewakili: US-O-02, US-O-03. State: tersedia & bentrok → tolak.
+======================================================================= -->
+<span class="screen-tag">Layar 8 · <small style="text-transform:none;">Petugas — Detail Pengajuan</small> <span class="n">US-O-02 · US-O-03</span> <span class="n">state: tersedia &amp; bentrok → tolak</span></span>
+<section class="screen" id="screen-detail-pengajuan">
+  <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="addr"><b>sirpek.uny.ac.id</b>/admin/pengajuan/PNJ-2026-00123</span></div>
+  <header class="site-header">
+    <div class="logo"><span class="mark">S</span><span>SIRPEK <span class="role">Mode Petugas</span></span></div>
+    <nav class="nav"><a href="#screen-petugas">Dasbor Petugas</a><a href="#screen-petugas" class="active">Daftar Pengajuan</a></nav>
+    <div class="spacer"></div>
+    <a class="btn ghost sm" href="#screen-petugas">← Kembali ke Daftar</a>
+  </header>
+
+  <main class="content">
+    <div class="breadcrumb"><b>Daftar Pengajuan</b> <span>/</span> Detail <b>PNJ-2026-00123</b></div>
+    <h1>Tinjau Pengajuan PNJ-2026-00123</h1>
+
+    <div class="banner ok"><b>✓ Cek ketersediaan otomatis:</b> R.12 tersedia 15 Okt 2026 — <b>tidak bentrok</b> (ST-08a).</div>
+
+    <div class="grid cols-12">
+      <div class="card">
+        <h2>👤 Data Pemohon</h2>
+        <p style="font-size:13.5px;line-height:2.1;color:#3d4c67;">
+          <b>Nama:</b> Raka Ardiansyah<br>
+          <b>NIM:</b> 23405241051<br>
+          <b>Kontak:</b> 0812-3456-7890<br>
+          <b>Organisasi:</b> Himpunan Mahasiswa TI
+        </p>
+      </div>
+      <div class="card">
+        <h2>📋 Data Kegiatan</h2>
+        <p style="font-size:13.5px;line-height:2.1;color:#3d4c67;">
+          <b>Kegiatan:</b> Seminar Nasional TI<br>
+          <b>Ruang:</b> R.12 Auditorium · 150 org<br>
+          <b>Waktu:</b> 15 Okt 2026 · 08.00–12.00<br>
+          <b>Peserta:</b> 100 orang<br>
+          <b>Keperluan:</b> Podium, sound eksternal
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;">
+      <a class="btn accent" href="#screen-petugas">✓ Setujui</a>
+      <a class="btn ghost" href="#screen-detail-pengajuan">✕ Tolak</a>
+    </div>
+
+    <!-- STATE: BENTROK → TOLAK wajib alasan — mewakili ST-08b (US-O-03). -->
+    <div class="state">
+      <span class="tag">STATE: BENTROK (ST-08b) — contoh pengajuan yang harus ditolak</span>
+      <div class="banner warn"><b>✕ R.16 bentrok pada 14 Okt 2026</b> dengan pengajuan PNJ-2026-00116 — petugas memilih Tolak.</div>
+      <div class="field" style="max-width:560px;">
+        <label>Alasan penolakan * <span style="color:var(--warn);">(wajib diisi)</span></label>
+        <textarea class="error-border">Slot 13.00–17.00 sudah terisi pengajuan lain.</textarea>
+        <span class="error-txt">Alasan wajib diisi sebelum menyimpan penolakan.</span>
+      </div>
+      <a class="btn ghost" href="#screen-petugas">Simpan Penolakan</a>
+      <span style="font-size:12.5px;color:var(--muted);margin-left:10px;">Setelah disimpan → status tampil di Riwayat mahasiswa (ST-06c Ditolak).</span>
+    </div>
+  </main>
+
+  <footer class="footer"><span>SIRPEK © 2026</span>
+    <a class="btn ghost sm" href="#screen-petugas">← Kembali ke Daftar Pengajuan</a>
+  </footer>
+</section>
+
+</body>
+</html>

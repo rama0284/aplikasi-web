@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype Klik — SIRPEK (Pertemuan 03)</title>
+<style>
+  :root{
+    --bg:#eaf0f8;
+    --surface:#ffffff;
+    --ink:#122033;
+    --muted:#5c6b83;
+    --accent:#2f6fdb;
+    --accent-2:#6d9bf0;
+    --accent-soft:#e7f0fe;
+    --line:#e0e7f1;
+    --danger:#b3261e;
+    --danger-soft:#fdeceb;
+    --radius:18px;
+    --shadow:0 1px 2px rgba(15,32,58,.06), 0 14px 34px -16px rgba(15,32,58,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1000px 420px at 85% -10%, #dfeaff 0%, transparent 60%),
+      radial-gradient(760px 380px at -8% 12%, #e8effb 0%, transparent 60%),
+      var(--bg);
+    min-height:100vh;
+  }
+  .wrap{max-width:1020px;margin:0 auto;padding:0 20px 90px;}
+
+  /* ---------- Header sticky ---------- */
+  header.top{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(10px);
+    background:rgba(250,252,255,.82);
+    border-bottom:1px solid var(--line);
+    padding:12px 0;
+  }
+  header.top .inner{max-width:1020px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:14px;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:.2px;}
+  .brand .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 6px 14px -6px rgba(47,111,219,.7);}
+  header.top nav{display:flex;gap:6px;margin-left:auto;font-size:13px;}
+  header.top nav a{color:var(--muted);text-decoration:none;padding:7px 12px;border-radius:999px;}
+  header.top nav a:hover{color:var(--accent);background:var(--accent-soft);}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:#1d55b5;font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid #cdddf7;}
+
+  /* ---------- Hero ---------- */
+  .hero{margin:40px 0 8px;}
+  .hero .kicker{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:34px;line-height:1.15;background:linear-gradient(120deg,var(--ink) 40%,#5f7fb3);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--muted);font-size:15px;margin-top:10px;max-width:640px;}
+  .hero .stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;color:var(--muted);box-shadow:0 6px 18px -12px rgba(15,32,58,.3);}
+  .stat b{color:var(--accent);font-weight:700;}
+
+  /* ---------- Path cards ---------- */
+  section.path{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin:26px 0;}
+  section.path h2{font-size:19px;display:flex;align-items:center;gap:10px;}
+  section.path h2 .ico{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;}
+  .happy .ico{background:linear-gradient(135deg,#2f6fdb,#6d9bf0);}
+  .bannerfail .ico{background:linear-gradient(135deg,#b3261e,#e07a68);}
+  .admin .ico{background:linear-gradient(135deg,#334155,#64748b);}
+  section.path > p{color:var(--muted);font-size:13.5px;margin:8px 0 18px;}
+  .desc{color:var(--muted);font-size:13.5px;margin:8px 0 18px !important;}
+
+  /* timeline */
+  .flow{position:relative;margin-top:6px;padding-left:52px;}
+  .flow::before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:linear-gradient(#d6e3f8,#eef2f9);}
+  .step{position:relative;padding:16px 18px 16px 20px;margin-bottom:14px;background:#fafcff;border:1.5px solid var(--line);border-radius:14px;transition:.18s;}
+  .step:hover{transform:translateY(-2px);border-color:#bcd2f2;box-shadow:0 10px 24px -14px rgba(47,111,219,.35);}
+  .step .num{position:absolute;left:-52px;top:16px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 4px 10px -3px rgba(47,111,219,.6);}
+  .step.bad .num{background:linear-gradient(135deg,#b3261e,#e07a68);box-shadow:0 4px 10px -3px rgba(179,38,30,.55);}
+  .step .what{font-weight:700;font-size:14.5px;}
+  .step .what .where{color:var(--muted);font-weight:400;font-size:12px;}
+  .step p{font-size:13px;color:var(--muted);margin-top:5px;}
+  .btns{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;text-decoration:none;font-size:13.5px;font-weight:600;transition:.16s;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn.accent{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 8px 18px -8px rgba(47,111,219,.75);}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+  .btn .arr{transition:.16s;}
+  .btn:hover .arr{transform:translateX(3px);}
+  .back{display:block;width:100%;margin-top:10px;font-size:12.5px;color:var(--accent);text-decoration:none;}
+  .back:hover{text-decoration:underline;}
+
+  footer{margin-top:34px;border-top:1px solid var(--line);padding-top:20px;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  footer .links a{color:var(--accent);text-decoration:none;margin-right:12px;}
+  footer .links a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="inner">
+    <div class="brand"><span class="mark">S</span> SIRPEK · Pertemuan 03</div>
+    <nav>
+      <a href="#happy">Happy Path</a>
+      <a href="#fail">Jalur Gagal</a>
+      <a href="#admin">Petugas</a>
+      <a href="05-wireframe-desktop.html">Desktop</a>
+      <a href="06-wireframe-mobile.html">Mobile</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===================== HERO ===================== -->
+  <div class="hero">
+    <span class="kicker">Prototipe Klik · Praktik Aplikasi Web INF60295</span>
+    <h1>Sistem Peminjaman Ruang<br>dan Peralatan Kampus</h1>
+    <p>Rama Putra Mahendra (24051130042) · Prototype menghubungkan seluruh layar wireframe — ikuti urutan langkah, semua tombol "Kembali" berfungsi, tidak ada jalan buntu.</p>
+    <div class="stats">
+      <span class="stat"><b>US-P-02</b> · Cari Ruang</span>
+      <span class="stat"><b>US-P-03</b> · Detail Ruang</span>
+      <span class="stat"><b>US-P-04</b> · Ajukan</span>
+      <span class="stat"><b>US-P-05</b> · Pantau Status</span>
+      <span class="stat"><b>US-O-01…03</b> · Petugas</span>
+    </div>
+  </div>
+
+  <!-- ===================== HAPPY PATH ===================== -->
+  <section class="path happy" id="happy">
+    <h2><span class="ico">✓</span> Alur Sukses (Happy Path)</h2>
+    <p class="desc">Raka (ketua panitia) mencari ruang untuk 50 peserta, memeriksa fasilitas, mengajukan peminjaman, lalu memastikan status ditemukan kembali. (US-P-02 → US-P-03 → US-P-04 → US-P-05)</p>
+
+    <div class="flow">
+      <div class="step">
+        <span class="num">1</span>
+        <div class="what">Mulai di Beranda / Cari Ruang</div>
+        <p>Raka sudah masuk, membuka kartu "Cari Ruang".</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-beranda">Buka Beranda <span class="arr">→</span></a></div>
+      </div>
+
+      <div class="step">
+        <span class="num">2</span>
+        <div class="what">Lihat Hasil Pencarian <span class="where">(klik "Cari Ruang")</span></div>
+        <p>Sistem menampilkan 3 ruang yang cocok; Raka memilih R.12.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-hasil">Lihat Hasil <span class="arr">→</span></a></div>
+      </div>
+
+      <div class="step">
+        <span class="num">3</span>
+        <div class="what">Buka Detail Ruang R.12 <span class="where">(klik "Lihat Detail")</span></div>
+        <p>Kapasitas 150 · fasilitas AC &amp; proyektor · slot 08.00–12.00 tersedia.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-detail-ruang">Buka Detail Ruang <span class="arr">→</span></a></div>
+      </div>
+
+      <div class="step">
+        <span class="num">4</span>
+        <div class="what">Isi Form Pengajuan <span class="where">(klik "Ajukan Peminjaman")</span></div>
+        <p>Raka mengisi kegiatan, 100 peserta, waktu 08.00–12.00.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-form">Buka Form <span class="arr">→</span></a></div>
+      </div>
+
+      <div class="step">
+        <span class="num">5</span>
+        <div class="what">Kirim → Konfirmasi Sukses</div>
+        <p>Sistem menerbitkan nomor <b>PNJ-2026-00123</b>, status <i>Diproses</i>.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-sukses">Lihat Konfirmasi <span class="arr">→</span></a></div>
+      </div>
+
+      <div class="step">
+        <span class="num">6</span>
+        <div class="what">Pantau Status di Riwayat</div>
+        <p>Raka menemukan kembali pengajuannya; status berubah Diproses → Disetujui.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-riwayat">Buka Status <span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAILURE PATH ===================== -->
+  <section class="path bannerfail" id="fail">
+    <h2><span class="ico">!</span> Alur Gagal (Error Recovery)</h2>
+    <p class="desc">Masalah dihadapi lalu dipulihkan: ruang tidak tersedia + form tidak lolos validasi — keduanya punya jalan "coba lagi" tanpa jalan buntu.</p>
+
+    <div class="flow">
+      <div class="step bad">
+        <span class="num">A</span>
+        <div class="what">Ruang tidak tersedia</div>
+        <p>Akses layar <i>Detail Ruang</i> lalu lihat blok <b>State: Tidak Tersedia (ST-04b)</b> + rekomendasi ruang lain.</p>
+        <div class="btns">
+          <a class="btn ghost" href="05-wireframe-desktop.html#screen-detail-ruang">Lihat State Tidak Tersedia</a>
+        </div>
+        <a class="back" href="05-wireframe-desktop.html#screen-hasil">← Tombol "Pilih Ruang Lain" kembali ke Hasil Pencarian</a>
+      </div>
+
+      <div class="step bad">
+        <span class="num">B</span>
+        <div class="what">Form tidak lolos validasi / bentrok</div>
+        <p>Jumlah peserta 0 &amp; waktu selesai lebih awal → <b>State: Validasi Error (ST-05a)</b>; bila bentrok, tawarkan "Cari Ruang Lain".</p>
+        <div class="btns">
+          <a class="btn ghost" href="05-wireframe-desktop.html#screen-form">Lihat State Validasi</a>
+        </div>
+        <a class="back" href="05-wireframe-desktop.html#screen-beranda">← Tombol "Cari Ruang Lain" kembali ke pencarian</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ADMIN PATH ===================== -->
+  <section class="path admin" id="admin">
+    <h2><span class="ico">◆</span> Alur Petugas (Admin)</h2>
+    <p class="desc">Petugas meninjau pengajuan &amp; mengubah status (US-O-01 → US-O-02 → US-O-03); hasil keputusan tampil di Riwayat mahasiswa.</p>
+
+    <div class="flow">
+      <div class="step">
+        <span class="num">1</span>
+        <div class="what">Dasbor Petugas &amp; Daftar Pengajuan</div>
+        <p>Ringkasan antrian + tabel pengajuan dengan filter status.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-petugas">Buka Dasbor Petugas <span class="arr">→</span></a></div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <div class="what">Tinjau Detail Pengajuan</div>
+        <p>Cek ketersediaan otomatis; bila bentrok, petugas wajib mengisi alasan penolakan.</p>
+        <div class="btns"><a class="btn accent" href="05-wireframe-desktop.html#screen-detail-pengajuan">Buka Detail Pengajuan <span class="arr">→</span></a></div>
+        <a class="back" href="05-wireframe-desktop.html#screen-petugas">← Kembali ke Daftar Pengajuan</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Prototype statis · dibuka langsung di browser tanpa build tool</div>
+    <div class="links">
+      <a href="05-wireframe-desktop.html">Wireframe desktop</a>
+      <a href="06-wireframe-mobile.html">Wireframe mobile</a>
+      <a href="01-scope-canvas.md">Scope</a>
+      <a href="02-sitemap.md">Sitemap</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

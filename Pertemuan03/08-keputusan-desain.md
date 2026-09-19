@@ -1,0 +1,14 @@
+# 08 — Keputusan Desain
+
+> [!NOTE]
+> <!-- TODO: sesuaikan dengan alasan yang benar-benar didiskusikan kelompok. -->
+> Tabel berikut mencatat keputusan desain penting selama pembuatan sitemap, user flow, dan wireframe (Pertemuan 03).
+
+| Keputusan | Dasar Persona/User Story | Alternatif | Alasan Dipilih | Perlu Diuji Lagi? |
+|-----------|--------------------------|------------|----------------|-------------------|
+| **1. Fokus satu alur tujuan utama** (Cari → Detail → Ajukan → Status) sebagai prototipe awal–akhir | Persona primer Raka hanya butuh satu alur utuh yang selesai; US-P-02/P-03/P-04/P-05 membentuk rantai yang utuh | Membangun semua fitur sekaligus (termasuk master ruang, peralatan terpisah) | Prototipe yang bisa diselesaikan awal–akhir lebih mudah diuji & dinilai; cakupan terkontrol (aset rubrik 15% keterhubungan & 15% prototype). Master data (US-O-04) sengaja dikeluarkan. | Ya — konfirmasi bahwa alur ini cukup untuk kebutuhan aktual pengguna. |
+| **2. Navigasi petugas dipisah dari pengguna mahasiswa** (mode "Petugas" terpisah di header) | Persona sekunder Bu Sri sering berpindah daftar & detail; US-O-01/O-02/O-03 adalah peran berbeda | Satu navigasi campuran pengguna & petugas | Mencegah salah peran, mengurangi beban kognitif, dan memudahkan tes end-to-end (rol mahasiswa pengguna tidak pernah melihat tombol admin). | Ya — perlu uji dengan petugas sungguhan. |
+| **3. Hasil pencarian memakai kartu (card) bukan tabel** | US-P-02: pengguna membandingkan fasilitas & slot secara visual; Raka dominan mobile | Tabel dengan banyak kolom | Kartu memudahkan *scanning* cepat (foto, kapasitas, fasilitas, badge status), target klik lebih besar di mobile (responsive 25%). | Ya — bandingkan kecepatan menyelesaikan tugas dengan tabel pada uji A/B. |
+| **4. Field kapasitas berupa input angka bebas, bukan dropdown 50/100/150** | Temuan usability Put.2 row No.1 (rentang tidak jelas); US-P-02 kriteria kapasitas bebas | Dropdown nilai terbatas | Input angka lebih fleksibel (menampung 50, 75, dst.), menghindari salah pilih, dan memudahkan filter "min." | Tidak perlu diuji ulang; cukup placeholder/teks bantu. |
+| **5. Status selalu tampil sebagai badge berwarna + filter** (Diproses/Disetujui/Ditolak/Dibatalkan) | US-P-05 (pantau status) & US-P-06 (batalkan); pain point Raka "tidak tahu perkembangan" | Kolom status berupa teks polos | Badge + filter memungkinkan pemindaian cepat dan menghindari layar buntu saat status berubah. | Tidak perlu diuji lagi; perbaiki kontras saja bila perlu. |
+| **6. Pemeriksaan ketersediaan berlangsung otomatis ketika detail dibuka & saat submit** | US-P-03 (tidak tersedia ditandai), US-P-04 (cegah bentrok), temuan kritis No.9 | Petugas mengecek manual semua pengajuan | Mengurangi *double booking* sejak awal: mahasiswa langsung tahu "tidak tersedia" atau "bentrok" sebelum submit, bukan setelah petugas meninjau. | Ya — skenario bentrok harus diuji berulang (beberapa pengajuan pada slot yang sama). |
