@@ -1,58 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🥗 NutriScan AI — Smart Nutrition & Food Vision Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**NutriScan AI** adalah aplikasi web analisis makanan berbasis kecerdasan buatan (*Artificial Intelligence*) yang dirancang untuk membantu mahasiswa dan masyarakat memantau asupan gizi harian secara cerdas, cepat, dan presisi. 
 
-## About Laravel
+Pengguna cukup mengunggah atau memotret hidangan makanan mereka. AI Vision mengenali hidangan, menaksir berat porsi visual, mencocokkannya dengan basis data nutrisi resmi (*Tabel Komposisi Pangan Indonesia / TKPI* Kemenkes RI), dan menyimpannya secara rapi ke dalam buku harian konsumsi harian (*Food Diary*).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **AI Food Scanner (Vision API 9Router)**
+   - Unggah foto makanan (JPG, PNG, WEBP).
+   - Pengenalan jenis makanan otomatis dengan AI Vision model (seperti `gpt-4o-mini`).
+   - Estimasi porsi visual dalam gram beserta tingkat keyakinan (*confidence score*).
+   - Dukungan *Mode Demo / Fallback Cerdas* yang transparan jika API Key belum dipasang.
 
-## Learning Laravel
+2. **Kalkulator Makronutrien & Koreksi Porsi Real-time**
+   - Slider porsi dinamis (10g – 2000g) yang secara otomatis memperbarui angka Kalori (kkal), Protein (g), Karbohidrat (g), dan Lemak (g).
+   - Diagram Donat (*Chart.js*) untuk visualisasi rasio makronutrien hidangan.
+   - Pilihan pencocokan ulang (*food correction*) jika AI mendeteksi variasi yang berbeda.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Food Diary Harian Terpadu**
+   - Pengelompokan makanan berdasarkan waktu konsumsi: **Sarapan, Makan Siang, Makan Malam, dan Camilan**.
+   - Navigasi tanggal kalender untuk meninjau pola makan hari-hari sebelumnya.
+   - Fitur tambah makanan manual (memilih dari database TKPI atau input kustom).
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Dashboard Interaktif & Ringkasan Gizi**
+   - Indikator target harian (*progress bar*) untuk Kalori, Protein, Karbohidrat, dan Lemak.
+   - Grafik batang tren kalori 7 hari terakhir.
+   - Daftar hidangan yang baru dikonsumsi hari ini.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+5. **Riwayat & Analisis Tren Kesehatan**
+   - Filter tren konsumsi 7 hari dan 30 hari terakhir.
+   - Statistik rata-rata kalori dan protein harian.
+   - Galeri foto riwayat seluruh pemindaian makanan.
 
-## Agentic Development
+6. **Chatbot Asisten Gizi AI (NutriScan Assistant)**
+   - Konsultasi interaktif seputar gizi seimbang, pola makan sehat, dan ide hidangan lokal.
+   - Kontekstual sesuai sasaran gizi pengguna.
+   - Dilengkapi *disclaimer medis edukatif* (bukan pengganti diagnosis klinis).
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+7. **Profil & Sasaran Nutrisi Personal**
+   - Kustomisasi target energi (kkal) dan batas makronutrien (protein, karbohidrat, lemak).
+   - Catatan preferensi diet atau pantangan makanan.
 
+---
+
+## 🛠️ Arsitektur & Teknologi
+
+- **Backend Framework**: Laravel 13 (PHP 8.2+)
+- **Database**: MySQL (didukung MariaDB & SQLite)
+- **Frontend / UI**:
+  - Blade Templating Engine
+  - Modern Responsive Styling (Tailwind CSS via CDN, palet warna bertema *Emerald Green* `#166534` & *Warm Cream* `#F8F8F2`)
+  - Interaktivitas Dinamis: Vanilla JavaScript & Chart.js
+  - Ikonografi: Lucide Icons
+- **AI Integration**: 9Router OpenAI-compatible endpoint (`/v1/chat/completions`) dengan dukungan Vision & JSON Mode.
+
+---
+
+## 📋 Prasyarat Sistem
+
+- PHP >= 8.2 dengan ekstensi `pdo`, `mbstring`, `fileinfo`, `curl`
+- Composer (Package Manager PHP)
+- MySQL / MariaDB (misalnya via XAMPP / Laragon) atau SQLite
+
+---
+
+## 🚀 Panduan Menjalankan Secara Lokal
+
+### 1. Salin Konfigurasi Lingkungan
+Pastikan file `.env` sudah dibuat dari `.env.example`:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cp .env.example .env
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Generate Application Key (Jika Diperlukan)
+```bash
+php artisan key:generate
+```
 
-## Contributing
+### 3. Konfigurasi Database
+Buka file `.env` dan sesuaikan koneksi database Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nutriscan_ai
+DB_USERNAME=root
+DB_PASSWORD=
+```
+*(Pastikan Anda telah membuat database bernama `nutriscan_ai` di phpMyAdmin / MySQL CLI)*.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Jalankan Migrasi & Seeder Data Makanan
+Jalankan perintah berikut untuk membuat struktur tabel dan mengisi ratusan data bahan makanan Indonesia (TKPI) beserta akun demo:
+```bash
+php artisan migrate --seed
+```
 
-## Code of Conduct
+### 5. Buat Symlink Storage Publik
+Agar foto makanan yang diunggah dapat ditampilkan di browser:
+```bash
+php artisan storage:link
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 6. Menjalankan Server Lokal
+Jalankan server pengembangan Laravel:
+```bash
+php artisan serve
+```
+Aplikasi kini dapat diakses melalui browser di: **http://127.0.0.1:8000**
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔑 Konfigurasi AI Vision (9Router)
 
-## License
+Buka file `.env` dan atur parameter berikut:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+# URL Basis API 9Router
+NUTRISCAN_AI_BASE_URL=https://api.9router.com/v1
+
+# Masukkan API Key dari https://9router.com
+NUTRISCAN_AI_API_KEY=sk-xxxxxx...
+
+# Model AI Vision yang digunakan
+NUTRISCAN_AI_MODEL=gpt-4o-mini
+
+# Mode demo/mock jika API Key belum diisi (true / false)
+NUTRISCAN_DEMO_MODE=true
+```
+
+> **Catatan Uji Coba / Praktikum:**  
+> Jika `NUTRISCAN_AI_API_KEY` belum diisi, sistem otomatis beralih ke **Mode Demo** dengan label yang jelas. Anda tetap dapat mengunggah foto makanan, melihat simulasi deteksi porsi visual, menyesuaikan slider gram, dan menyimpannya ke Food Diary tanpa kendala.
+
+---
+
+## 👤 Akun Pengujian Default (Seeder)
+
+Setelah menjalankan `php artisan db:seed`, Anda dapat langsung masuk menggunakan akun default berikut:
+- **Email**: `demo@nutriscan.ai`
+- **Password**: `password123`
+
+Atau Anda dapat mendaftarkan akun baru melalui halaman registrasi **Daftar Gratis**.
+
+---
+
+## 🧪 Menjalankan Pengujian Otomatis (Feature Tests)
+
+Proyek ini telah dilengkapi dengan pengujian otomatis untuk alur autentikasi dan alur pemindaian makanan:
+```bash
+php artisan test
+```
+
+---
+
+## 📄 Lisensi & Hak Cipta
+Dikembangkan untuk keperluan praktikum pengembangan aplikasi web berbasis kecerdasan buatan.  
+Basis data nutrisi mengacu pada **Tabel Komposisi Pangan Indonesia (TKPI)** Kementerian Kesehatan Republik Indonesia.

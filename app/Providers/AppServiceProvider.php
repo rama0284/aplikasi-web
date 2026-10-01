@@ -11,7 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(
+            \App\Services\AIServiceInterface::class,
+            \App\Services\AIService::class
+        );
     }
 
     /**
