@@ -43,10 +43,10 @@ class DatabaseSeeder extends Seeder
 
         // 4. Create sample initial meal logs for today if empty
         if ($demoUser->mealLogs()->count() === 0) {
-            $nasi = Food::where('name', 'Nasi Putih')->first();
-            $telur = Food::where('name', 'Telur Dadar')->first();
-            $ayam = Food::where('name', 'Ayam Bakar')->first();
-            $bayam = Food::where('name', 'Sayur Bayam Bening')->first();
+            $nasi = Food::where('name', 'like', '%Nasi Putih%')->first();
+            $telur = Food::where('name', 'like', '%Telur Dadar%')->first();
+            $ayam = Food::where('name', 'like', '%Ayam Bakar%')->first();
+            $bayam = Food::where('name', 'like', '%Bayam%')->first();
 
             if ($nasi && $telur) {
                 // Sarapan

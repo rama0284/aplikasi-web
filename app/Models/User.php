@@ -72,6 +72,7 @@ class User extends Authenticatable
         return $this->hasOne(NutritionGoal::class);
     }
 
+
     /**
      * Get or create default nutrition goal for user.
      */

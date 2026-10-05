@@ -75,7 +75,7 @@ class NutriScanScannerTest extends TestCase
             'error_message' => null,
         ]);
 
-        $image = UploadedFile::fake()->image('food.jpg', 640, 480);
+        $image = UploadedFile::fake()->create('food.jpg', 500, 'image/jpeg');
 
         $response = $this->actingAs($user)->post('/scanner', [
             'image' => $image,

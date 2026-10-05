@@ -12,6 +12,9 @@ use Illuminate\View\View;
 
 class FoodDiaryController extends Controller
 {
+    /**
+     * Tampilkan buku harian makan (Food Diary) berdasarkan tanggal.
+     */
     public function index(Request $request): View
     {
         $user = Auth::user();
@@ -59,6 +62,9 @@ class FoodDiaryController extends Controller
         ));
     }
 
+    /**
+     * Simpan entri catatan makanan baru ke jurnal.
+     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -124,6 +130,74 @@ class FoodDiaryController extends Controller
             ->with('success', 'Catatan makanan berhasil ditambahkan ke buku harian.');
     }
 
+    /**
+     * Tampilkan form edit log makanan.
+     */
+    public function edit(int $id): View
+    {
+        $log = MealLog::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $allFoods = Food::orderBy('name')->get();
+
+        return view('diary.edit', compact('log', 'allFoods'));
+    }
+
+    /**
+     * Perbarui entri log makanan.
+     */
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $log = MealLog::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'meal_type' => ['required', 'in:sarapan,makan_siang,makan_malam,camilan'],
+            'portion_grams' => ['required', 'numeric', 'min:5', 'max:2500'],
+            'consumed_at' => ['required', 'date'],
+        ]);
+
+        $portion = (float) $validated['portion_grams'];
+        $consumedAt = Carbon::parse($validated['consumed_at']);
+
+        if ($log->food_id) {
+            $food = $log->food ?: Food::find($log->food_id);
+            if ($food) {
+                $calc = $food->calculateForPortion($portion);
+                $log->update([
+                    'meal_type' => $validated['meal_type'],
+                    'portion_grams' => $portion,
+                    'calories' => $calc['calories'],
+                    'protein' => $calc['protein'],
+                    'carbohydrates' => $calc['carbohydrates'],
+                    'fat' => $calc['fat'],
+                    'fiber' => $calc['fiber'],
+                    'consumed_at' => $consumedAt,
+                ]);
+            }
+        } else {
+            $oldPortion = max(1, $log->portion_grams ?: 100);
+            $ratio = $portion / $oldPortion;
+            $log->update([
+                'meal_type' => $validated['meal_type'],
+                'portion_grams' => $portion,
+                'calories' => round($log->calories * $ratio, 1),
+                'protein' => round($log->protein * $ratio, 1),
+                'carbohydrates' => round($log->carbohydrates * $ratio, 1),
+                'fat' => round($log->fat * $ratio, 1),
+                'consumed_at' => $consumedAt,
+            ]);
+        }
+
+        return redirect()->route('diary.index', ['date' => $consumedAt->format('Y-m-d')])
+            ->with('success', 'Catatan makanan berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus entri log makanan.
+     */
     public function destroy(int $id): RedirectResponse
     {
         $log = MealLog::where('id', $id)

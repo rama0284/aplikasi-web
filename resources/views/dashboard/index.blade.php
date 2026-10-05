@@ -1,323 +1,497 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard — NutriScan AI')
-@section('page_title', 'Ringkasan Nutrisi Harian')
+@section('title', 'NutriScan AI — Smart Nutrition Dashboard')
+@section('page_title', 'Dashboard Gizi & Kalori')
 
 @section('content')
-<div class="space-y-8">
+<div class="space-y-7">
 
-    <!-- Hero Bento Card with Dynamic Glassmorphic Glow -->
-    <div class="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 text-white overflow-hidden shadow-xl shadow-emerald-950/20 border border-emerald-700/40">
-        <!-- Ambient Glow Circles -->
-        <div class="absolute -right-12 -top-12 w-80 h-80 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-teal-400/15 rounded-full blur-3xl pointer-events-none"></div>
+    {{-- ══════════════ 1. HERO BENTO BANNER ══════════════ --}}
+    <div class="relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-xl border border-emerald-700/40">
+        <div class="absolute -right-16 -top-16 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div class="space-y-3 max-w-xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/60 text-emerald-200 text-xs font-semibold backdrop-blur-md border border-emerald-600/40 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Monitoring Nutrisi Pintar Hari Ini</span>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="space-y-2 max-w-xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/60 text-emerald-200 text-xs font-bold backdrop-blur-md border border-emerald-600/40">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>NutriScan AI Active • Target Kalori Personal</span>
                 </div>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
-                    Semangat Sehat, {{ $user->name }}!
+                <h2 class="text-2xl sm:text-3xl font-black tracking-tight">
+                    Halo, {{ Auth::user()->name }}! 👋
                 </h2>
-                <p class="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                    Asupan energi Anda telah mencapai <span class="font-bold text-white underline decoration-emerald-400 decoration-2">{{ $totalCalories }} kkal</span> dari sasaran harian <span class="font-bold text-white">{{ $calorieGoal }} kkal</span>.
+                <p class="text-sm text-emerald-100/80 leading-relaxed font-normal">
+                    @if($caloriePercent < 50)
+                        Awali hari dengan asupan gizi seimbang. Jangan lewatkan sarapan kaya protein untuk energi optimal.
+                    @elseif($caloriePercent <= 90)
+                        Bagus sekali! Asupan nutrisi harian Anda mendekati target optimal secara sehat dan teratur.
+                    @else
+                        Target kalori harian Anda telah tercapai! Tetap jaga hidrasi dan cukupi istirahat hari ini.
+                    @endif
                 </p>
-
-                <!-- Quick Macro Status Pills -->
-                <div class="flex flex-wrap gap-2 pt-2">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 backdrop-blur-md text-[11px] font-semibold border border-white/10 text-emerald-100">
-                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                        <span>Protein: {{ $totalProtein }}g / {{ $proteinGoal }}g</span>
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 backdrop-blur-md text-[11px] font-semibold border border-white/10 text-emerald-100">
-                        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                        <span>Karbo: {{ $totalCarbs }}g / {{ $carbsGoal }}g</span>
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 backdrop-blur-md text-[11px] font-semibold border border-white/10 text-emerald-100">
-                        <span class="w-2 h-2 rounded-full bg-rose-400"></span>
-                        <span>Lemak: {{ $totalFat }}g / {{ $fatGoal }}g</span>
-                    </span>
-                </div>
             </div>
 
-            <!-- Right Circular Meter & Quick Action -->
-            <div class="flex flex-col sm:flex-row lg:flex-col items-center gap-4 bg-emerald-900/60 p-5 rounded-2xl border border-emerald-700/40 backdrop-blur-md">
-                <div class="flex items-center gap-4">
-                    <div class="relative w-16 h-16 flex items-center justify-center">
-                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                            <path class="text-emerald-800" stroke-width="3.5" stroke="currentColor" fill="none"
-                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            <path class="text-emerald-400 transition-all duration-1000 ease-out" stroke-width="3.5"
-                                stroke-dasharray="{{ $caloriePercent }}, 100" stroke-linecap="round" stroke="currentColor" fill="none"
-                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        </svg>
-                        <span class="absolute text-xs font-black text-white">{{ $caloriePercent }}%</span>
-                    </div>
-                    <div>
-                        <span class="text-[11px] text-emerald-200 block font-medium">Sisa Kuota Kalori</span>
-                        <span class="text-lg font-black text-white">{{ max(0, round($calorieGoal - $totalCalories, 1)) }} kkal</span>
-                    </div>
-                </div>
-
-                <a href="{{ route('scanner.index') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-emerald-950 font-extrabold text-xs shadow-lg shadow-black/10 hover:bg-emerald-50 hover:scale-[1.02] transition">
-                    <i data-lucide="scan" class="w-4 h-4 text-emerald-800"></i>
-                    <span>Scan Piring Makanan</span>
+            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row items-stretch sm:items-center gap-3">
+                <a href="{{ route('scanner.index') }}" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white text-emerald-950 font-black text-sm hover:bg-emerald-50 hover:scale-[1.02] transition shadow-lg shadow-black/15">
+                    <i data-lucide="scan" class="w-4 h-4 text-emerald-700"></i>
+                    <span>Scan Makanan AI</span>
+                </a>
+                <a href="{{ route('foods.index') }}" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-emerald-800/80 hover:bg-emerald-800 text-white font-bold text-sm border border-emerald-600/50 backdrop-blur-md transition">
+                    <i data-lucide="database" class="w-4 h-4 text-emerald-300"></i>
+                    <span>Katalog {{ $totalFoodsCount }} Makanan</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Macronutrient Bento Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- Kalori -->
-        <div class="p-5 rounded-3xl bg-white/90 backdrop-blur-md border border-stone-200/90 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-charcoal-muted">Energi Total</span>
-                <div class="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center shadow-sm">
-                    <i data-lucide="flame" class="w-5 h-5 text-emerald-700"></i>
-                </div>
-            </div>
-            <div class="flex items-baseline gap-1.5">
-                <span class="text-3xl font-black text-emerald-950 tracking-tight">{{ $totalCalories }}</span>
-                <span class="text-xs text-charcoal-muted font-bold">/ {{ $calorieGoal }} kkal</span>
-            </div>
-            <!-- Progress Bar -->
-            <div class="mt-3.5 w-full bg-cream-300 rounded-full h-2.5 overflow-hidden">
-                <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 h-2.5 rounded-full transition-all duration-700" style="width: {{ $caloriePercent }}%"></div>
-            </div>
-            <div class="flex justify-between items-center text-[11px] text-charcoal-light mt-2 font-medium">
-                <span class="text-emerald-800 font-bold">{{ $caloriePercent }}% tercapai</span>
-                <span>Sisa: {{ max(0, round($calorieGoal - $totalCalories, 1)) }} kkal</span>
-            </div>
-        </div>
-
-        <!-- Protein -->
-        <div class="p-5 rounded-3xl bg-white/90 backdrop-blur-md border border-stone-200/90 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-blue-900">Protein</span>
-                <div class="w-9 h-9 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center shadow-sm">
-                    <i data-lucide="egg" class="w-5 h-5 text-blue-700"></i>
-                </div>
-            </div>
-            <div class="flex items-baseline gap-1.5">
-                <span class="text-3xl font-black text-blue-950 tracking-tight">{{ $totalProtein }}</span>
-                <span class="text-xs text-charcoal-muted font-bold">/ {{ $proteinGoal }} g</span>
-            </div>
-            <div class="mt-3.5 w-full bg-cream-300 rounded-full h-2.5 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-500 to-blue-700 h-2.5 rounded-full transition-all duration-700" style="width: {{ $proteinPercent }}%"></div>
-            </div>
-            <div class="flex justify-between items-center text-[11px] text-charcoal-light mt-2 font-medium">
-                <span class="text-blue-800 font-bold">{{ $proteinPercent }}% tercapai</span>
-                <span>Sisa: {{ max(0, round($proteinGoal - $totalProtein, 1)) }} g</span>
-            </div>
-        </div>
-
-        <!-- Karbohidrat -->
-        <div class="p-5 rounded-3xl bg-white/90 backdrop-blur-md border border-stone-200/90 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-amber-900">Karbohidrat</span>
-                <div class="w-9 h-9 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shadow-sm">
-                    <i data-lucide="wheat" class="w-5 h-5 text-amber-700"></i>
-                </div>
-            </div>
-            <div class="flex items-baseline gap-1.5">
-                <span class="text-3xl font-black text-amber-950 tracking-tight">{{ $totalCarbs }}</span>
-                <span class="text-xs text-charcoal-muted font-bold">/ {{ $carbsGoal }} g</span>
-            </div>
-            <div class="mt-3.5 w-full bg-cream-300 rounded-full h-2.5 overflow-hidden">
-                <div class="bg-gradient-to-r from-amber-500 to-amber-700 h-2.5 rounded-full transition-all duration-700" style="width: {{ $carbsPercent }}%"></div>
-            </div>
-            <div class="flex justify-between items-center text-[11px] text-charcoal-light mt-2 font-medium">
-                <span class="text-amber-800 font-bold">{{ $carbsPercent }}% tercapai</span>
-                <span>Sisa: {{ max(0, round($carbsGoal - $totalCarbs, 1)) }} g</span>
-            </div>
-        </div>
-
-        <!-- Lemak -->
-        <div class="p-5 rounded-3xl bg-white/90 backdrop-blur-md border border-stone-200/90 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-rose-900">Lemak</span>
-                <div class="w-9 h-9 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center shadow-sm">
-                    <i data-lucide="droplet" class="w-5 h-5 text-rose-700"></i>
-                </div>
-            </div>
-            <div class="flex items-baseline gap-1.5">
-                <span class="text-3xl font-black text-rose-950 tracking-tight">{{ $totalFat }}</span>
-                <span class="text-xs text-charcoal-muted font-bold">/ {{ $fatGoal }} g</span>
-            </div>
-            <div class="mt-3.5 w-full bg-cream-300 rounded-full h-2.5 overflow-hidden">
-                <div class="bg-gradient-to-r from-rose-500 to-rose-700 h-2.5 rounded-full transition-all duration-700" style="width: {{ $fatPercent }}%"></div>
-            </div>
-            <div class="flex justify-between items-center text-[11px] text-charcoal-light mt-2 font-medium">
-                <span class="text-rose-800 font-bold">{{ $fatPercent }}% batas</span>
-                <span>Sisa: {{ max(0, round($fatGoal - $totalFat, 1)) }} g</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Charts & Today's Meals Timeline -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-        <!-- 7-Day Calorie Trend Chart (7 cols) -->
-        <div class="lg:col-span-7 bg-white/90 backdrop-blur-md p-6 sm:p-7 rounded-3xl border border-stone-200/90 shadow-sm flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-6">
+    {{-- ══════════════ 2. BENTO ROW: CALORIE GAUGE & MACROS ══════════════ --}}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        {{-- Calorie Gauge Card (5 cols) --}}
+        <div class="lg:col-span-5 bg-white/95 rounded-3xl p-6 sm:p-7 border border-stone-200/90 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h3 class="text-base font-black text-charcoal tracking-tight">Tren Konsumsi 7 Hari Terakhir</h3>
-                    <p class="text-xs text-charcoal-muted mt-0.5">Asupan kalori harian dibandingkan konsistensi sasaran</p>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-charcoal-light">Konsumsi Harian</span>
+                    <h3 class="text-base font-black text-charcoal">Energi & Kalori Hari Ini</h3>
                 </div>
-                <a href="{{ route('history.index') }}" class="text-xs font-extrabold text-emerald-800 hover:text-emerald-950 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 transition flex items-center gap-1">
-                    <span>Detail Tren</span>
+                <span class="px-2.5 py-1 rounded-full text-xs font-black {{ $caloriePercent > 100 ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800' }}">
+                    {{ $caloriePercent }}% Target
+                </span>
+            </div>
+
+            {{-- Progress Circle / Big Indicator --}}
+            <div class="my-auto py-4 text-center">
+                <div class="relative inline-flex items-center justify-center">
+                    <svg class="w-44 h-44 -rotate-90 transform" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" stroke="#f1f5f9" stroke-width="10" fill="transparent" />
+                        <circle cx="60" cy="60" r="50" stroke="#047857" stroke-width="10" stroke-linecap="round" fill="transparent"
+                            stroke-dasharray="{{ 2 * 3.14159 * 50 }}"
+                            stroke-dashoffset="{{ (2 * 3.14159 * 50) * (1 - ($caloriePercent / 100)) }}"
+                            class="transition-all duration-1000 ease-out" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span class="text-3xl sm:text-4xl font-black text-charcoal tracking-tight">{{ number_format($totalCalories, 0) }}</span>
+                        <span class="text-xs font-bold text-charcoal-muted uppercase">dari {{ number_format($calorieGoal, 0) }} kkal</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-center gap-6 text-xs">
+                    <div>
+                        <span class="text-[10px] font-bold text-charcoal-light uppercase block">Sudah Masuk</span>
+                        <strong class="text-emerald-800 font-black text-sm">{{ number_format($totalCalories, 0) }} kkal</strong>
+                    </div>
+                    <div class="h-6 w-px bg-stone-200"></div>
+                    <div>
+                        <span class="text-[10px] font-bold text-charcoal-light uppercase block">Sisa Alokasi</span>
+                        <strong class="text-charcoal font-black text-sm">{{ number_format($remainingCalories, 0) }} kkal</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-stone-200/70 flex items-center justify-between text-xs">
+                <span class="text-charcoal-muted">Target diet Anda:</span>
+                <a href="{{ route('profile.index') }}" class="font-bold text-emerald-800 hover:underline flex items-center gap-1">
+                    <span>Ubah Target</span>
                     <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                 </a>
             </div>
+        </div>
 
-            <div class="h-64 relative">
-                <canvas id="weeklyChart"></canvas>
+        {{-- Macro Nutrients Cards (7 cols) --}}
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            {{-- Protein Card --}}
+            <div class="p-5 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs flex flex-col justify-between hover:border-blue-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
+                                <i data-lucide="dumbbell" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-extrabold text-xs text-blue-950 uppercase tracking-wider">Protein</span>
+                        </div>
+                        <span class="text-xs font-black text-blue-800">{{ $proteinPercent }}%</span>
+                    </div>
+
+                    <div class="my-3">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-2xl font-black text-blue-950">{{ $totalProtein }}g</span>
+                            <span class="text-xs font-semibold text-charcoal-muted">/ {{ $proteinGoal }}g target</span>
+                        </div>
+                        <div class="mt-2 h-2 w-full bg-blue-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-600 rounded-full transition-all duration-700" style="width: {{ $proteinPercent }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[11px] text-charcoal-muted font-medium pt-2 border-t border-stone-100">
+                    Membangun otot dan regenerasi sel tubuh.
+                </p>
             </div>
 
-            <!-- Smart AI Health Insight Micro-Widget -->
-            <div class="mt-6 pt-4 border-t border-stone-200/70 flex items-start gap-3 bg-cream-100 p-3.5 rounded-2xl border border-stone-200/60 text-xs">
-                <div class="w-7 h-7 rounded-xl bg-emerald-800 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                    <i data-lucide="sparkles" class="w-4 h-4 text-emerald-200"></i>
+            {{-- Carbohydrates Card --}}
+            <div class="p-5 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs flex flex-col justify-between hover:border-amber-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+                                <i data-lucide="wheat" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-extrabold text-xs text-amber-950 uppercase tracking-wider">Karbohidrat</span>
+                        </div>
+                        <span class="text-xs font-black text-amber-800">{{ $carbsPercent }}%</span>
+                    </div>
+
+                    <div class="my-3">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-2xl font-black text-amber-950">{{ $totalCarbs }}g</span>
+                            <span class="text-xs font-semibold text-charcoal-muted">/ {{ $carbsGoal }}g target</span>
+                        </div>
+                        <div class="mt-2 h-2 w-full bg-amber-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-amber-500 rounded-full transition-all duration-700" style="width: {{ $carbsPercent }}%"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex-1">
-                    <strong class="text-emerald-950 font-bold block mb-0.5">NutriScan AI Insight:</strong>
-                    <p class="text-charcoal-muted leading-relaxed">
-                        @if($totalCalories == 0)
-                            Anda belum mencatat makanan hari ini. Awali hari dengan sarapan berprotein tinggi seperti telur atau yogurt untuk energi stabil!
-                        @elseif($proteinPercent >= 80)
-                            Hebat! Asupan protein Anda hari ini sudah {{ $proteinPercent }}% tercapai. Ini sangat optimal untuk metabolisme dan kebugaran tubuh.
-                        @else
-                            Konsumsi energi Anda hari ini {{ $caloriePercent }}%. Pastikan mencukupi kebutuhan serat dan cairan untuk menjaga fokus harian.
-                        @endif
-                    </p>
+                <p class="text-[11px] text-charcoal-muted font-medium pt-2 border-t border-stone-100">
+                    Sumber bahan bakar utama aktivitas harian.
+                </p>
+            </div>
+
+            {{-- Fat Card --}}
+            <div class="p-5 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs flex flex-col justify-between hover:border-rose-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center">
+                                <i data-lucide="flame" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-extrabold text-xs text-rose-950 uppercase tracking-wider">Lemak Sehat</span>
+                        </div>
+                        <span class="text-xs font-black text-rose-800">{{ $fatPercent }}%</span>
+                    </div>
+
+                    <div class="my-3">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-2xl font-black text-rose-950">{{ $totalFat }}g</span>
+                            <span class="text-xs font-semibold text-charcoal-muted">/ {{ $fatGoal }}g target</span>
+                        </div>
+                        <div class="mt-2 h-2 w-full bg-rose-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-rose-500 rounded-full transition-all duration-700" style="width: {{ $fatPercent }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[11px] text-charcoal-muted font-medium pt-2 border-t border-stone-100">
+                    Dibutuhkan untuk penyerapan vitamin A, D, E, K.
+                </p>
+            </div>
+
+            {{-- Fiber Card --}}
+            <div class="p-5 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                                <i data-lucide="apple" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-extrabold text-xs text-emerald-950 uppercase tracking-wider">Serat Alami</span>
+                        </div>
+                        <span class="text-xs font-black text-emerald-800">Sehat</span>
+                    </div>
+
+                    <div class="my-3">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-2xl font-black text-emerald-950">{{ $totalFiber }}g</span>
+                            <span class="text-xs font-semibold text-charcoal-muted">konsumsi hari ini</span>
+                        </div>
+                        <div class="mt-2 h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-600 rounded-full" style="width: {{ min(100, round(($totalFiber / 25) * 100)) }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[11px] text-charcoal-muted font-medium pt-2 border-t border-stone-100">
+                    Menjaga mikrobioma usus & stabilitas gula darah.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {{-- ══════════════ 3. QUICK ACTIONS BAR ══════════════ --}}
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <a href="{{ route('scanner.index') }}" class="group p-4 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs hover:shadow-md hover:border-emerald-300 transition flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition duration-300">
+                <i data-lucide="camera" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="font-black text-sm text-charcoal group-hover:text-emerald-800">Scan AI</h4>
+                <p class="text-[11px] text-charcoal-muted">Deteksi foto piring</p>
+            </div>
+        </a>
+
+        <a href="{{ route('diary.index') }}" class="group p-4 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center shadow-xs group-hover:scale-110 transition duration-300">
+                <i data-lucide="book-open" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="font-black text-sm text-charcoal group-hover:text-blue-800">Jurnal Makan</h4>
+                <p class="text-[11px] text-charcoal-muted">Catat konsumsi</p>
+            </div>
+        </a>
+
+        <a href="{{ route('foods.create') }}" class="group p-4 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs hover:shadow-md hover:border-amber-300 transition flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shadow-xs group-hover:scale-110 transition duration-300">
+                <i data-lucide="plus-circle" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="font-black text-sm text-charcoal group-hover:text-amber-800">Entri Baru</h4>
+                <p class="text-[11px] text-charcoal-muted">Tambah ke database</p>
+            </div>
+        </a>
+
+        <a href="{{ route('assistant.index') }}" class="group p-4 rounded-3xl bg-white/95 border border-stone-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center shadow-xs group-hover:scale-110 transition duration-300">
+                <i data-lucide="bot" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="font-black text-sm text-charcoal group-hover:text-teal-800">Asisten AI</h4>
+                <p class="text-[11px] text-charcoal-muted">Konsultasi gizi</p>
+            </div>
+        </a>
+    </div>
+
+    {{-- ══════════════ 4. BENTO ROW: TODAY'S MEAL TIMELINE & 7-DAY TRENDS ══════════════ --}}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+        
+        {{-- Today's Meals Timeline (7 cols) --}}
+        <div class="lg:col-span-7 bg-white/95 rounded-3xl p-6 sm:p-7 border border-stone-200/90 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-stone-200/70">
+                <div>
+                    <h3 class="font-black text-base text-charcoal flex items-center gap-2">
+                        <i data-lucide="clock" class="w-4 h-4 text-emerald-700"></i>
+                        <span>Menu & Jurnal Hari Ini</span>
+                    </h3>
+                    <p class="text-xs text-charcoal-muted">Riwayat sarapan, makan siang, malam, dan camilan terdaftar.</p>
+                </div>
+                <a href="{{ route('diary.index') }}" class="text-xs font-bold text-emerald-800 hover:underline">
+                    Buka Diary Lengkap →
+                </a>
+            </div>
+
+            {{-- 4 Meal Times Container --}}
+            <div class="space-y-4">
+                
+                {{-- Sarapan --}}
+                <div class="p-4 rounded-2xl bg-cream-100 border border-stone-200/70">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-black text-charcoal uppercase flex items-center gap-1.5">
+                            <span>🍳 Sarapan Pagi</span>
+                            <span class="text-[10px] font-bold text-charcoal-muted">({{ $groupedMeals['sarapan']->count() }} item)</span>
+                        </span>
+                        <span class="text-xs font-black text-emerald-800">
+                            {{ number_format($groupedMeals['sarapan']->sum('calories'), 0) }} kkal
+                        </span>
+                    </div>
+
+                    @forelse($groupedMeals['sarapan'] as $item)
+                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
+                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                            <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
+                        </div>
+                    @empty
+                        <p class="text-xs text-charcoal-light py-1">Belum ada makanan sarapan yang dicatat.</p>
+                    @endforelse
+                </div>
+
+                {{-- Makan Siang --}}
+                <div class="p-4 rounded-2xl bg-cream-100 border border-stone-200/70">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-black text-charcoal uppercase flex items-center gap-1.5">
+                            <span>🍛 Makan Siang</span>
+                            <span class="text-[10px] font-bold text-charcoal-muted">({{ $groupedMeals['makan_siang']->count() }} item)</span>
+                        </span>
+                        <span class="text-xs font-black text-emerald-800">
+                            {{ number_format($groupedMeals['makan_siang']->sum('calories'), 0) }} kkal
+                        </span>
+                    </div>
+
+                    @forelse($groupedMeals['makan_siang'] as $item)
+                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
+                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                            <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
+                        </div>
+                    @empty
+                        <p class="text-xs text-charcoal-light py-1">Belum ada makanan siang yang dicatat.</p>
+                    @endforelse
+                </div>
+
+                {{-- Makan Malam --}}
+                <div class="p-4 rounded-2xl bg-cream-100 border border-stone-200/70">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-black text-charcoal uppercase flex items-center gap-1.5">
+                            <span>🍲 Makan Malam</span>
+                            <span class="text-[10px] font-bold text-charcoal-muted">({{ $groupedMeals['makan_malam']->count() }} item)</span>
+                        </span>
+                        <span class="text-xs font-black text-emerald-800">
+                            {{ number_format($groupedMeals['makan_malam']->sum('calories'), 0) }} kkal
+                        </span>
+                    </div>
+
+                    @forelse($groupedMeals['makan_malam'] as $item)
+                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
+                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                            <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
+                        </div>
+                    @empty
+                        <p class="text-xs text-charcoal-light py-1">Belum ada makanan malam yang dicatat.</p>
+                    @endforelse
+                </div>
+
+                {{-- Camilan --}}
+                <div class="p-4 rounded-2xl bg-cream-100 border border-stone-200/70">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-black text-charcoal uppercase flex items-center gap-1.5">
+                            <span>🥪 Camilan & Minuman</span>
+                            <span class="text-[10px] font-bold text-charcoal-muted">({{ $groupedMeals['camilan']->count() }} item)</span>
+                        </span>
+                        <span class="text-xs font-black text-emerald-800">
+                            {{ number_format($groupedMeals['camilan']->sum('calories'), 0) }} kkal
+                        </span>
+                    </div>
+
+                    @forelse($groupedMeals['camilan'] as $item)
+                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
+                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                            <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
+                        </div>
+                    @empty
+                        <p class="text-xs text-charcoal-light py-1">Belum ada camilan yang dicatat.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
 
-        <!-- Today's Recent Meals Timeline (5 cols) -->
-        <div class="lg:col-span-5 bg-white/90 backdrop-blur-md p-6 sm:p-7 rounded-3xl border border-stone-200/90 shadow-sm flex flex-col">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h3 class="text-base font-black text-charcoal tracking-tight">Makanan Hari Ini</h3>
-                    <p class="text-xs text-charcoal-muted mt-0.5">{{ count($todayLogs) }} hidangan telah tercatat</p>
+        {{-- 7-Day Trend Chart & Food DB Recommendations (5 cols) --}}
+        <div class="lg:col-span-5 space-y-6">
+            
+            {{-- Chart Card --}}
+            <div class="bg-white/95 rounded-3xl p-6 sm:p-7 border border-stone-200/90 shadow-xs space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-stone-200/70">
+                    <div>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-charcoal-light">Tren Konsumsi</span>
+                        <h3 class="text-base font-black text-charcoal">Kalori 7 Hari Terakhir</h3>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                        Target: {{ $calorieGoal }} kkal
+                    </span>
                 </div>
-                <a href="{{ route('diary.index') }}" class="text-xs font-bold text-emerald-800 hover:underline">
-                    Buku Harian
-                </a>
+
+                <div class="h-56">
+                    <canvas id="weeklyChart"></canvas>
+                </div>
             </div>
 
-            <!-- Meals List or Clean Empty State -->
-            @if(count($todayLogs) > 0)
-                <div class="space-y-3 overflow-y-auto max-h-80 custom-scrollbar flex-1 pr-1">
-                    @foreach($todayLogs as $log)
-                        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-cream-100 border border-stone-200/80 hover:border-emerald-600/40 hover:bg-cream-200 transition group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-2xl bg-emerald-800/10 text-emerald-800 flex items-center justify-center font-bold text-xs group-hover:scale-105 transition-transform">
-                                    @if($log->food_scan_id)
-                                        <i data-lucide="scan" class="w-4 h-4"></i>
-                                    @else
-                                        <i data-lucide="utensils" class="w-4 h-4"></i>
-                                    @endif
-                                </div>
-                                <div>
-                                    <h4 class="text-xs font-black text-charcoal">{{ $log->display_name }}</h4>
-                                    <p class="text-[11px] text-charcoal-muted">
-                                        <span class="capitalize font-bold text-emerald-800">{{ $log->meal_type_label }}</span> &bull; {{ $log->portion_grams }}g
-                                        @if($log->food_scan_id)
-                                            <span class="ml-1 text-[9px] font-bold px-1.5 py-0.2 bg-emerald-100 text-emerald-800 rounded">AI Scan</span>
-                                        @endif
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-black text-emerald-950">{{ $log->calories }} <span class="text-[10px] font-normal text-charcoal-muted">kkal</span></span>
-                                <p class="text-[10px] text-charcoal-light font-medium">P: {{ $log->protein }}g &bull; K: {{ $log->carbohydrates }}g</p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <!-- Clean Empty State -->
-                <div class="flex-1 flex flex-col items-center justify-center py-8 text-center">
-                    <div class="w-14 h-14 rounded-3xl bg-cream-300 text-charcoal-light flex items-center justify-center mb-3 shadow-inner">
-                        <i data-lucide="salad" class="w-7 h-7 text-emerald-700"></i>
+            {{-- Recommended Healthy Foods from DB --}}
+            <div class="bg-white/95 rounded-3xl p-6 sm:p-7 border border-stone-200/90 shadow-xs space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800">Rekomendasi Menu Sehat</span>
+                        <h4 class="text-base font-black text-charcoal">Pilihan Bergizi Tinggi</h4>
                     </div>
-                    <h4 class="text-sm font-bold text-charcoal">Belum Ada Makanan Hari Ini</h4>
-                    <p class="text-xs text-charcoal-muted max-w-xs mt-1 mb-4 leading-relaxed">
-                        Unggah foto menu sarapan, makan siang, atau camilan Anda untuk kalkulasi nutrisi instan.
-                    </p>
-                    <a href="{{ route('scanner.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-800 text-white text-xs font-bold hover:bg-emerald-900 transition shadow-md shadow-emerald-950/10">
-                        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                        <span>Scan Makanan Sekarang</span>
+                    <a href="{{ route('foods.index') }}" class="text-xs font-bold text-emerald-800 hover:underline">
+                        Lihat Semua →
                     </a>
                 </div>
-            @endif
 
-            <div class="pt-4 mt-auto border-t border-stone-200/70 flex items-center justify-between text-xs text-charcoal-muted font-medium">
-                <span>Total Serat Harian: <strong class="text-charcoal font-black">{{ $totalFiber }} g</strong></span>
-                <span class="text-[11px] text-emerald-800 font-semibold">Tabel Komposisi Pangan RI</span>
+                <div class="space-y-2.5">
+                    @foreach($recommendedFoods as $rec)
+                    <div class="p-3 rounded-2xl bg-cream-100 border border-stone-200/70 hover:border-emerald-300 hover:bg-white transition flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">{{ $rec->icon_emoji ?: '🥗' }}</span>
+                            <div>
+                                <h5 class="text-xs font-black text-charcoal line-clamp-1">
+                                    <a href="{{ route('foods.show', $rec->id) }}" class="hover:text-emerald-800">{{ $rec->name }}</a>
+                                </h5>
+                                <p class="text-[11px] text-charcoal-muted">
+                                    {{ number_format($rec->calories_per_100g, 0) }} kkal • {{ $rec->protein_per_100g }}g protein
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ route('foods.show', $rec->id) }}" class="p-1.5 rounded-xl bg-cream-200 text-charcoal hover:bg-emerald-100 hover:text-emerald-900 transition" title="Lihat Nilai Gizi">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+{{-- ══════════════ CHART.JS INITIALIZATION ══════════════ --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('weeklyChart');
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: {!! json_encode($chartLabels) !!},
-                    datasets: [{
-                        label: 'Asupan Kalori (kkal)',
-                        data: {!! json_encode($chartCalories) !!},
-                        backgroundColor: '#166534',
-                        hoverBackgroundColor: '#047857',
-                        borderRadius: 10,
-                        barThickness: 28,
-                    }]
+document.addEventListener('DOMContentLoaded', () => {
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
+
+    // Create gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+    gradient.addColorStop(0, 'rgba(4, 120, 87, 0.45)');
+    gradient.addColorStop(1, 'rgba(4, 120, 87, 0.02)');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartLabels) !!},
+            datasets: [{
+                label: 'Asupan Kalori (kkal)',
+                data: {!! json_encode($chartCalories) !!},
+                borderColor: '#047857',
+                backgroundColor: gradient,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#047857',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#14532d',
-                            padding: 10,
-                            titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
-                            bodyFont: { family: 'Plus Jakarta Sans', size: 11 },
-                            callbacks: {
-                                label: function(context) {
-                                    return context.parsed.y + ' kkal';
-                                }
-                            }
-                        }
+                tooltip: {
+                    backgroundColor: '#064e3b',
+                    titleFont: { size: 12, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 12,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#EFEFE5' },
-                            ticks: {
-                                font: { family: 'Plus Jakarta Sans', size: 11 },
-                                color: '#859685'
-                            }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
-                                color: '#526052'
-                            }
-                        }
+                    ticks: {
+                        font: { size: 10 },
+                        color: '#7e917e',
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                    ticks: {
+                        font: { size: 10 },
+                        color: '#7e917e',
                     }
                 }
-            });
+            }
         }
     });
+});
 </script>
 @endsection

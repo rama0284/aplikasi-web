@@ -20,6 +20,12 @@ class Food extends Model
         'carbohydrates_per_100g',
         'fat_per_100g',
         'fiber_per_100g',
+        'sugar_g',
+        'sodium_mg',
+        'serving_size',
+        'health_grade',
+        'icon_emoji',
+        'description',
         'nutrition_source',
     ];
 
@@ -31,6 +37,8 @@ class Food extends Model
             'carbohydrates_per_100g' => 'float',
             'fat_per_100g' => 'float',
             'fiber_per_100g' => 'float',
+            'sugar_g' => 'float',
+            'sodium_mg' => 'float',
         ];
     }
 
@@ -48,8 +56,24 @@ class Food extends Model
             'protein' => round($this->protein_per_100g * $factor, 1),
             'carbohydrates' => round($this->carbohydrates_per_100g * $factor, 1),
             'fat' => round($this->fat_per_100g * $factor, 1),
-            'fiber' => $this->fiber_per_100g !== null ? round($this->fiber_per_100g * $factor, 1) : null,
+            'fiber' => $this->fiber_per_100g !== null ? round($this->fiber_per_100g * $factor, 1) : 0,
+            'sugar' => $this->sugar_g !== null ? round($this->sugar_g * $factor, 1) : 0,
+            'sodium' => $this->sodium_mg !== null ? round($this->sodium_mg * $factor, 1) : 0,
         ];
+    }
+
+    /**
+     * Badge visual status grade kesehatan
+     */
+    public function getGradeBadgeAttribute(): array
+    {
+        return match ($this->health_grade) {
+            'A' => ['bg' => 'bg-emerald-100 text-emerald-800 border-emerald-300', 'label' => 'Sangat Sehat (Grade A)'],
+            'B' => ['bg' => 'bg-teal-100 text-teal-800 border-teal-300', 'label' => 'Baik / Seimbang (Grade B)'],
+            'C' => ['bg' => 'bg-amber-100 text-amber-800 border-amber-300', 'label' => 'Konsumsi Wajar (Grade C)'],
+            'D' => ['bg' => 'bg-rose-100 text-rose-800 border-rose-300', 'label' => 'Batasi Konsumsi (Grade D)'],
+            default => ['bg' => 'bg-stone-100 text-stone-800 border-stone-300', 'label' => 'Grade ' . ($this->health_grade ?: 'A')],
+        };
     }
 
     public function mealLogs(): HasMany
