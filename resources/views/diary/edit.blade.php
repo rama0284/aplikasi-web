@@ -23,13 +23,8 @@
                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800">Edit Entri Jurnal</span>
                 <h2 class="text-xl font-black text-charcoal mt-0.5">{{ $log->display_name }}</h2>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-emerald-100/70 text-emerald-800 flex items-center justify-center text-xl font-bold shadow-inner">
-                @if($log->food && $log->food->icon_emoji)
-                    {{ $log->food->icon_emoji }}
-                @else
-                    🥗
-                @endif
-            </div>
+            <img src="{{ $log->image_url }}" alt="{{ $log->display_name }}"
+                 class="w-12 h-12 rounded-2xl object-cover border border-stone-200 shadow-sm">
         </div>
 
         <form method="POST" action="{{ route('diary.update', $log->id) }}" class="space-y-5">

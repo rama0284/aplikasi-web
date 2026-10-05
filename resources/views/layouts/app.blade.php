@@ -27,20 +27,21 @@
                             500: '#10b981',
                             600: '#059669',
                             700: '#047857',
-                            800: '#064e3b', // Deep Forest Primary
-                            900: '#022c22',
-                            950: '#011c16',
+                            800: '#065f46', // Deep Forest Primary
+                            900: '#064e3b',
+                            950: '#022c22',
                         },
                         cream: {
                             50: '#FFFFFF',
-                            100: '#FCFBF7',
-                            200: '#F6F5EE', // Luxury Warm Soft Background
-                            300: '#EBE9DE',
+                            100: '#FAF9F5',
+                            200: '#F4F2EA', // Warm Soft Background
+                            300: '#E9E6DA',
                             400: '#DDD9CB',
                         },
+                        lime: { 400: '#a3e635', 500: '#84cc16' },
                         charcoal: {
-                            DEFAULT: '#1c241c',
-                            muted: '#4d5d4d',
+                            DEFAULT: '#1a231a',
+                            muted: '#4b5a4b',
                             light: '#7e917e',
                         }
                     },
@@ -60,8 +61,8 @@
 
     <style>
         body {
-            background-color: #F6F5EE;
-            color: #1c241c;
+            background-color: #F4F2EA;
+            color: #1a231a;
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
         }
         .custom-scrollbar::-webkit-scrollbar {
@@ -69,7 +70,7 @@
             height: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #F6F5EE;
+            background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #CBD5E1;
@@ -83,10 +84,14 @@
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(235, 233, 222, 0.9);
+            border: 1px solid rgba(233, 230, 218, 0.9);
         }
         .glass-dark {
-            background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+            background: linear-gradient(135deg, #065f46 0%, #022c22 100%);
+        }
+        .nav-active {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            box-shadow: 0 8px 20px -6px rgba(2, 44, 34, 0.5);
         }
     </style>
 </head>
@@ -102,7 +107,7 @@
         <div class="h-20 flex items-center justify-between px-6 border-b border-stone-200/80">
             <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group">
                 <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 text-white flex items-center justify-center shadow-lg shadow-emerald-900/25 group-hover:scale-105 transition duration-300">
-                    <i data-lucide="sparkles" class="w-5 h-5 text-emerald-200 animate-pulse"></i>
+                    <i data-lucide="scan-line" class="w-5 h-5 text-emerald-100"></i>
                 </div>
                 <div>
                     <span class="text-xl font-black tracking-tight text-emerald-950 flex items-center gap-1.5">

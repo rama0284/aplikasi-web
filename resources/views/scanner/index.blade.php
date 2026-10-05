@@ -19,7 +19,7 @@
                         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">[DEMO AKTIF]</span>
                     </div>
                     <p class="text-xs text-amber-900/90 leading-relaxed mt-0.5">
-                        AI dapat mendeteksi burger, pizza, kentang, sate, nasi goreng, ayam, bakso, dll. Untuk mengaktifkan Vision AI nyata, pasang API Key di <code class="font-mono bg-amber-100 px-1 py-0.5 rounded text-[11px]">.env</code>.
+                        AI dapat mendeteksi burger, pizza, kentang, sate, nasi goreng, ayam, bakso, dll. Untuk mengaktifkan Vision AI nyata, pasang API Key 9Router di <code class="font-mono bg-amber-100 px-1 py-0.5 rounded text-[11px]">.env</code>.
                     </p>
                 </div>
             </div>
@@ -143,6 +143,28 @@
             <p class="text-charcoal-muted leading-relaxed">Anda selalu dapat menyesuaikan takaran gram porsi secara dinamis pada halaman hasil.</p>
         </div>
     </div>
+
+    <!-- Contoh Foto untuk Dicoba -->
+    <div class="bg-white/80 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-stone-200/90 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-sm font-black text-emerald-950 flex items-center gap-2">
+                    <i data-lucide="images" class="w-4 h-4 text-emerald-700"></i>
+                    <span>Coba dengan Foto Contoh</span>
+                </h3>
+                <p class="text-[11px] text-charcoal-muted mt-0.5">Klik salah satu foto untuk langsung mengisi area unggah.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            @foreach(['nasi-goreng.jpg' => 'Nasi Goreng', 'ayam-bakar.jpg' => 'Ayam Bakar', 'sate-ayam.jpg' => 'Sate Ayam', 'bakso.jpg' => 'Bakso', 'salad.jpg' => 'Salad', 'pizza.jpg' => 'Pizza'] as $file => $label)
+                <button type="button" onclick="loadSampleImage('{{ asset('images/foods/' . $file) }}', '{{ $file }}', this)"
+                    class="group relative rounded-2xl overflow-hidden aspect-square border-2 border-transparent hover:border-emerald-600 focus:border-emerald-600 transition shadow-sm">
+                    <img src="{{ asset('images/foods/' . $file) }}" alt="{{ $label }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                    <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-emerald-950/90 to-transparent pt-6 pb-1.5 text-[10px] font-bold text-white text-center">{{ $label }}</span>
+                </button>
+            @endforeach
+        </div>
+    </div>
 </div>
 
 <script>
@@ -196,6 +218,28 @@
         const overlay = document.getElementById('loadingOverlay');
         overlay.classList.remove('hidden');
         overlay.classList.add('flex');
+    }
+
+    // Muat foto contoh dari server menjadi File agar bisa langsung dianalisis
+    async function loadSampleImage(url, filename, btn) {
+        try {
+            if (btn) btn.disabled = true;
+            const res = await fetch(url);
+            const blob = await res.blob();
+            const file = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            const input = document.getElementById('imageInput');
+            input.files = dt.files;
+
+            previewSelectedImage(input);
+            document.getElementById('dropzone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (err) {
+            alert('Gagal memuat foto contoh. Silakan unggah foto Anda sendiri.');
+        } finally {
+            if (btn) btn.disabled = false;
+        }
     }
 </script>
 @endsection

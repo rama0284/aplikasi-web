@@ -130,15 +130,8 @@
                             @foreach($secLogs as $log)
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-cream-50 border border-stone-200/70 hover:border-emerald-500/40 hover:bg-white transition gap-3">
                                     <div class="flex items-center gap-3.5">
-                                        <div class="w-10 h-10 rounded-2xl bg-emerald-100/70 text-emerald-800 flex items-center justify-center font-bold text-sm shadow-inner flex-shrink-0">
-                                            @if($log->food && $log->food->icon_emoji)
-                                                <span>{{ $log->food->icon_emoji }}</span>
-                                            @elseif($log->food_scan_id)
-                                                <i data-lucide="scan" class="w-5 h-5 text-amber-600"></i>
-                                            @else
-                                                <i data-lucide="utensils" class="w-5 h-5 text-emerald-800"></i>
-                                            @endif
-                                        </div>
+                                        <img src="{{ $log->image_url }}" alt="{{ $log->display_name }}"
+                                             class="w-12 h-12 rounded-2xl object-cover border border-stone-200 shadow-sm flex-shrink-0">
                                         <div>
                                             <h5 class="text-xs sm:text-sm font-black text-charcoal">{{ $log->display_name }}</h5>
                                             <p class="text-[11px] text-charcoal-muted flex items-center gap-1.5 mt-0.5">

@@ -159,12 +159,11 @@
 
             <div class="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                    {{-- Header: Emoji, Category, Health Grade Badge --}}
+                    {{-- Header: Foto, Category, Health Grade Badge --}}
                     <div class="flex items-start justify-between gap-3 mb-3">
                         <div class="flex items-center gap-3">
-                            <span class="text-3xl p-2.5 rounded-2xl bg-cream-200 border border-stone-200/70 shadow-inner group-hover:scale-110 transition duration-300">
-                                {{ $food->icon_emoji ?: '🥗' }}
-                            </span>
+                            <img src="{{ $food->imageUrl() }}" alt="{{ $food->name }}"
+                                 class="w-14 h-14 rounded-2xl object-cover border border-stone-200/70 shadow-sm group-hover:scale-110 transition duration-300">
                             <div>
                                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
                                     {{ $food->category }}

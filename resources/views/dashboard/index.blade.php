@@ -7,9 +7,9 @@
 <div class="space-y-7">
 
     {{-- ══════════════ 1. HERO BENTO BANNER ══════════════ --}}
-    <div class="relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-xl border border-emerald-700/40">
-        <div class="absolute -right-16 -top-16 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative overflow-hidden p-6 sm:p-8 rounded-3xl text-white shadow-xl border border-emerald-700/40">
+        <img src="{{ asset('images/hero/hero-food.jpg') }}" alt="Makanan sehat" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-950/92 to-emerald-900/60"></div>
 
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-2 max-w-xl">
@@ -291,8 +291,9 @@
                     </div>
 
                     @forelse($groupedMeals['sarapan'] as $item)
-                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
-                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                        <div class="flex items-center gap-3 py-2 text-xs border-t border-stone-200/50">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->display_name }}" class="w-10 h-10 rounded-xl object-cover border border-stone-200 flex-shrink-0">
+                            <span class="font-semibold text-charcoal flex-1 line-clamp-1">{{ $item->display_name }} <span class="text-charcoal-light font-normal">({{ $item->portion_grams }}g)</span></span>
                             <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
                         </div>
                     @empty
@@ -313,8 +314,9 @@
                     </div>
 
                     @forelse($groupedMeals['makan_siang'] as $item)
-                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
-                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                        <div class="flex items-center gap-3 py-2 text-xs border-t border-stone-200/50">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->display_name }}" class="w-10 h-10 rounded-xl object-cover border border-stone-200 flex-shrink-0">
+                            <span class="font-semibold text-charcoal flex-1 line-clamp-1">{{ $item->display_name }} <span class="text-charcoal-light font-normal">({{ $item->portion_grams }}g)</span></span>
                             <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
                         </div>
                     @empty
@@ -335,8 +337,9 @@
                     </div>
 
                     @forelse($groupedMeals['makan_malam'] as $item)
-                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
-                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                        <div class="flex items-center gap-3 py-2 text-xs border-t border-stone-200/50">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->display_name }}" class="w-10 h-10 rounded-xl object-cover border border-stone-200 flex-shrink-0">
+                            <span class="font-semibold text-charcoal flex-1 line-clamp-1">{{ $item->display_name }} <span class="text-charcoal-light font-normal">({{ $item->portion_grams }}g)</span></span>
                             <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
                         </div>
                     @empty
@@ -357,8 +360,9 @@
                     </div>
 
                     @forelse($groupedMeals['camilan'] as $item)
-                        <div class="flex items-center justify-between py-1.5 text-xs border-t border-stone-200/50">
-                            <span class="font-semibold text-charcoal">{{ $item->display_name }} ({{ $item->portion_grams }}g)</span>
+                        <div class="flex items-center gap-3 py-2 text-xs border-t border-stone-200/50">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->display_name }}" class="w-10 h-10 rounded-xl object-cover border border-stone-200 flex-shrink-0">
+                            <span class="font-semibold text-charcoal flex-1 line-clamp-1">{{ $item->display_name }} <span class="text-charcoal-light font-normal">({{ $item->portion_grams }}g)</span></span>
                             <span class="font-bold text-charcoal-muted">{{ number_format($item->calories, 0) }} kkal</span>
                         </div>
                     @empty
@@ -404,7 +408,7 @@
                     @foreach($recommendedFoods as $rec)
                     <div class="p-3 rounded-2xl bg-cream-100 border border-stone-200/70 hover:border-emerald-300 hover:bg-white transition flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <span class="text-2xl">{{ $rec->icon_emoji ?: '🥗' }}</span>
+                            <img src="{{ $rec->imageUrl() }}" alt="{{ $rec->name }}" class="w-12 h-12 rounded-xl object-cover border border-stone-200 flex-shrink-0">
                             <div>
                                 <h5 class="text-xs font-black text-charcoal line-clamp-1">
                                     <a href="{{ route('foods.show', $rec->id) }}" class="hover:text-emerald-800">{{ $rec->name }}</a>

@@ -76,6 +76,66 @@ class Food extends Model
         };
     }
 
+    /**
+     * Peta kata kunci nama makanan ke file foto real di public/images/foods.
+     * Urutan penting: kata kunci yang lebih spesifik harus lebih dulu.
+     */
+    public const IMAGE_MAP = [
+        'nasi goreng'      => 'nasi-goreng.jpg',
+        'nasi putih'       => 'nasi-goreng.jpg',
+        'nasi kuning'      => 'nasi-goreng.jpg',
+        'mie goreng'       => 'mie-goreng.jpg',
+        'spaghetti'        => 'pasta.jpg',
+        'bolognese'        => 'pasta.jpg',
+        'dada ayam'        => 'ayam-bakar.jpg',
+        'ayam bakar'       => 'ayam-bakar.jpg',
+        'ayam goreng'      => 'ayam-geprek.jpg',
+        'geprek'           => 'ayam-geprek.jpg',
+        'rendang'          => 'rendang.jpg',
+        'gurame'           => 'soto-ayam.jpg',
+        'ikan'             => 'soto-ayam.jpg',
+        'telur dadar'      => 'telur-dadar.jpg',
+        'telur'            => 'telur-dadar.jpg',
+        'tempe'            => 'tempe-tahu.jpg',
+        'tahu'             => 'tempe-tahu.jpg',
+        'bayam'            => 'sayur-bayam.jpg',
+        'sop'              => 'sayur-bayam.jpg',
+        'gado-gado'        => 'salad.jpg',
+        'capcay'           => 'sayur-bayam.jpg',
+        'sayur'            => 'sayur-bayam.jpg',
+        'pisang'           => 'pisang.jpg',
+        'apel'             => 'apel.jpg',
+        'alpukat'          => 'salad.jpg',
+        'susu'             => 'salad.jpg',
+        'teh hijau'        => 'salad.jpg',
+        'yogurt'           => 'salad.jpg',
+        'oatmeal'          => 'salad.jpg',
+        'burger'           => 'burger.jpg',
+        'pizza'            => 'pizza.jpg',
+        'sate'             => 'sate-ayam.jpg',
+        'bakso'            => 'bakso.jpg',
+        'soto'             => 'soto-ayam.jpg',
+        'martabak'         => 'martabak.jpg',
+        'salad'            => 'salad.jpg',
+    ];
+
+    /**
+     * URL foto real makanan. Mengembalikan path lokal jika cocok,
+     * atau gambar placeholder berbasis nama agar tetap tampil rapi.
+     */
+    public function imageUrl(): string
+    {
+        $name = strtolower((string) $this->name);
+
+        foreach (self::IMAGE_MAP as $keyword => $file) {
+            if (str_contains($name, $keyword)) {
+                return asset('images/foods/' . $file);
+            }
+        }
+
+        return asset('images/foods/salad.jpg');
+    }
+
     public function mealLogs(): HasMany
     {
         return $this->hasMany(MealLog::class);

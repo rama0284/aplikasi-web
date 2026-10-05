@@ -36,6 +36,105 @@ class AIService implements AIServiceInterface
     }
 
     /**
+     * Cari nilai pertama yang cocok dari daftar kunci, secara rekursif pada array bersarang.
+     */
+    protected function findNestedValue(array $data, array $keys)
+    {
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $data) && !is_array($data[$key]) && $data[$key] !== '' && $data[$key] !== null) {
+                return $data[$key];
+            }
+        }
+        foreach ($data as $value) {
+            if (is_array($value)) {
+                $found = $this->findNestedValue($value, $keys);
+                if ($found !== null) {
+                    return $found;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Parse respons teks AI menjadi array hasil analisis makanan yang toleran variasi.
+     * Menangani: markdown fence, struktur bersarang, dan kunci alternatif.
+     */
+    protected function parseFoodJson(?string $content): ?array
+    {
+        if (!$content) {
+            return null;
+        }
+
+        // Bersihkan berbagai bentuk markdown code fence
+        $clean = trim($content);
+        $clean = preg_replace('/^```(?:json)?\s*/i', '', $clean);
+        $clean = preg_replace('/\s*```$/i', '', $clean);
+        $clean = trim($clean);
+
+        $parsed = json_decode($clean, true);
+
+        // Jika belum array, coba ekstrak objek JSON pertama di dalam teks
+        if (!is_array($parsed)) {
+            if (preg_match('/\{.*\}/s', $clean, $m)) {
+                $parsed = json_decode($m[0], true);
+            }
+        }
+
+        if (!is_array($parsed)) {
+            return null;
+        }
+
+        // Cari nama makanan dari berbagai kemungkinan kunci (rekursif)
+        $name = $this->findNestedValue($parsed, [
+            'food_name', 'nama_makanan', 'nama', 'name', 'detected_food', 'dish', 'hidangan',
+        ]);
+
+        if (!$name || !is_string($name)) {
+            return null;
+        }
+
+        $portion = $this->findNestedValue($parsed, [
+            'estimated_portion_grams', 'portion_grams', 'berat_bersih_estimasi_g',
+            'berat_g', 'estimasi_porsi', 'portion',
+        ]);
+
+        $confidence = $this->findNestedValue($parsed, ['confidence', 'keyakinan', 'skor']);
+
+        // Ambil bahan-bahan (cari array string pertama yang relevan)
+        $ingredients = [];
+        $rawIngredients = $this->findNestedValue($parsed, [
+            'possible_ingredients', 'bahan', 'ingredients', 'bahan_terlihat', 'komponen',
+        ]);
+        if (is_array($rawIngredients)) {
+            $ingredients = array_values(array_filter($rawIngredients, 'is_string'));
+        }
+
+        // Bonus: ambil estimasi kalori & makro jika AI menyediakannya
+        $calories = $this->findNestedValue($parsed, ['kalori_total_kcal', 'calories', 'kalori', 'energi_kcal']);
+        $protein = $this->findNestedValue($parsed, ['protein_g', 'protein']);
+        $carbs = $this->findNestedValue($parsed, ['karbohidrat_g', 'carbohydrates', 'karbo']);
+        $fat = $this->findNestedValue($parsed, ['lemak_total_g', 'fat', 'lemak']);
+        $fiber = $this->findNestedValue($parsed, ['serat_g', 'fiber', 'serat']);
+
+        $notes = $this->findNestedValue($parsed, ['notes', 'catatan', 'catatan_kesehatan']);
+
+        return [
+            'food_name' => trim((string) $name),
+            'possible_ingredients' => $ingredients,
+            'estimated_portion_grams' => is_numeric($portion) ? (float) $portion : 200.0,
+            'confidence' => is_numeric($confidence) ? (float) $confidence : 0.9,
+            'notes' => is_string($notes) ? $notes : 'Hasil identifikasi visual AI.',
+            'ai_calories' => is_numeric($calories) ? (float) $calories : null,
+            'ai_protein' => is_numeric($protein) ? (float) $protein : null,
+            'ai_carbs' => is_numeric($carbs) ? (float) $carbs : null,
+            'ai_fat' => is_numeric($fat) ? (float) $fat : null,
+            'ai_fiber' => is_numeric($fiber) ? (float) $fiber : null,
+            'raw_response' => $parsed,
+        ];
+    }
+
+    /**
      * Identify food using Vision model (Google Gemini or 9Router/OpenAI).
      */
     public function identifyFood(string $imagePath, string $mimeType = 'image/jpeg', ?string $originalFilename = null): array
@@ -287,10 +386,9 @@ PROMPT;
             return $this->detectSmartFoodFromImage('', $originalFilename);
         }
 
-        $cleanContent = trim(preg_replace('/^```(?:json)?\s*|\s*```$/m', '', $content));
-        $parsed = json_decode($cleanContent, true);
+        $parsed = $this->parseFoodJson($content);
 
-        if (!is_array($parsed) || empty($parsed['food_name'])) {
+        if (!$parsed) {
             return $this->detectSmartFoodFromImage('', $originalFilename);
         }
 
@@ -298,11 +396,16 @@ PROMPT;
             'success' => true,
             'is_demo' => false,
             'food_name' => $parsed['food_name'],
-            'possible_ingredients' => $parsed['possible_ingredients'] ?? [],
-            'estimated_portion_grams' => isset($parsed['estimated_portion_grams']) ? (float)$parsed['estimated_portion_grams'] : 200.0,
-            'confidence' => isset($parsed['confidence']) ? (float)$parsed['confidence'] : 0.95,
-            'notes' => $parsed['notes'] ?? 'Hasil identifikasi visual AI.',
-            'raw_response' => $parsed,
+            'possible_ingredients' => $parsed['possible_ingredients'],
+            'estimated_portion_grams' => $parsed['estimated_portion_grams'],
+            'confidence' => $parsed['confidence'],
+            'notes' => $parsed['notes'],
+            'ai_calories' => $parsed['ai_calories'],
+            'ai_protein' => $parsed['ai_protein'],
+            'ai_carbs' => $parsed['ai_carbs'],
+            'ai_fat' => $parsed['ai_fat'],
+            'ai_fiber' => $parsed['ai_fiber'],
+            'raw_response' => $parsed['raw_response'],
             'error_message' => null,
         ];
     }

@@ -112,26 +112,45 @@ Aplikasi kini dapat diakses melalui browser di: **http://127.0.0.1:8000**
 
 ---
 
-## 🔑 Konfigurasi AI Vision (9Router)
+## 🔑 Konfigurasi AI Vision (9Router / GripHub)
+
+Aplikasi memakai **9Router OpenAI-compatible API** sebagai provider AI default. Contoh
+setup yang sudah terbukti berjalan memakai **GripHub Router**.
 
 Buka file `.env` dan atur parameter berikut:
 
 ```env
-# URL Basis API 9Router
-NUTRISCAN_AI_BASE_URL=https://api.9router.com/v1
+# Provider AI: "9router" (OpenAI-compatible) atau "gemini"
+NUTRISCAN_AI_PROVIDER=9router
 
-# Masukkan API Key dari https://9router.com
+# Base URL endpoint API
+NUTRISCAN_AI_BASE_URL=https://griphubrouter.web.id/v1
+
+# API Key dari dashboard provider
 NUTRISCAN_AI_API_KEY=sk-xxxxxx...
 
-# Model AI Vision yang digunakan
-NUTRISCAN_AI_MODEL=gpt-4o-mini
+# Model AI Vision (harus mendukung kemampuan vision/gambar)
+NUTRISCAN_AI_9ROUTER_MODEL=gemini-3.8-flash
 
 # Mode demo/mock jika API Key belum diisi (true / false)
-NUTRISCAN_DEMO_MODE=true
+NUTRISCAN_DEMO_MODE=false
+```
+
+Setelah mengubah `.env`, jalankan:
+
+```bash
+php artisan config:clear
 ```
 
 > **Catatan Uji Coba / Praktikum:**  
-> Jika `NUTRISCAN_AI_API_KEY` belum diisi, sistem otomatis beralih ke **Mode Demo** dengan label yang jelas. Anda tetap dapat mengunggah foto makanan, melihat simulasi deteksi porsi visual, menyesuaikan slider gram, dan menyimpannya ke Food Diary tanpa kendala.
+> Jika `NUTRISCAN_AI_API_KEY` belum diisi atau `NUTRISCAN_DEMO_MODE=true`, sistem otomatis
+> beralih ke **Mode Demo** dengan label yang jelas. Anda tetap dapat mengunggah foto makanan,
+> melihat simulasi deteksi porsi visual, menyesuaikan slider gram, dan menyimpannya ke Food
+> Diary tanpa kendala.
+>
+> **Model vision yang tersedia di GripHub** (contoh): `gemini-3.8-flash`, `gemini-3.1-pro`,
+> `gpt-5.6-luna`, `gpt-5.6-sol`, `claude-sonnet-5`, `claude-opus-5`, `qwen-3.8-max`, `grok-4.7`, dll.
+> Lihat daftar lengkap via `GET {BASE_URL}/models` dengan header `Authorization: Bearer <API_KEY>`.
 
 ---
 

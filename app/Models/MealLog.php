@@ -62,6 +62,26 @@ class MealLog extends Model
     }
 
     /**
+     * URL foto real untuk item makanan pada log ini.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->food) {
+            return $this->food->imageUrl();
+        }
+
+        $name = strtolower((string) ($this->custom_food_name ?? ''));
+
+        foreach (Food::IMAGE_MAP as $keyword => $file) {
+            if (str_contains($name, $keyword)) {
+                return asset('images/foods/' . $file);
+            }
+        }
+
+        return asset('images/foods/salad.jpg');
+    }
+
+    /**
      * Get label for Indonesian meal type.
      */
     public function getMealTypeLabelAttribute(): string

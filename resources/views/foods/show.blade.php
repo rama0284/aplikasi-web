@@ -29,9 +29,8 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             
             <div class="flex items-start gap-4 sm:gap-5">
-                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-cream-200 border border-stone-200/80 flex items-center justify-center text-4xl sm:text-5xl shadow-inner flex-shrink-0">
-                    {{ $food->icon_emoji ?: '🥗' }}
-                </div>
+                <img src="{{ $food->imageUrl() }}" alt="{{ $food->name }}"
+                     class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl object-cover border border-stone-200/80 shadow-sm flex-shrink-0">
                 <div class="space-y-1.5">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200/60">
@@ -196,7 +195,7 @@
                     @foreach($similarFoods as $sim)
                     <a href="{{ route('foods.show', $sim->id) }}" class="p-3 rounded-2xl bg-cream-100 border border-stone-200/70 hover:border-emerald-300 hover:bg-white transition block group">
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xl">{{ $sim->icon_emoji ?: '🥗' }}</span>
+                            <img src="{{ $sim->imageUrl() }}" alt="{{ $sim->name }}" class="w-8 h-8 rounded-lg object-cover border border-stone-200 flex-shrink-0">
                             <span class="font-bold text-xs text-charcoal group-hover:text-emerald-800 truncate">{{ $sim->name }}</span>
                         </div>
                         <p class="text-[11px] text-charcoal-muted">{{ number_format($sim->calories_per_100g, 0) }} kkal • {{ $sim->protein_per_100g }}g prot</p>
